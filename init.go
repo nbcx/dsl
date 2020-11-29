@@ -1,5 +1,5 @@
 package gcs
 
 func Get() string {
-	return "gcs"
+	return "gcs local"
 }
