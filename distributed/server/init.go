@@ -1,38 +1,15 @@
 package server
 
 import (
-	"github.com/golang/protobuf/proto"
+	"github.com/nbcx/gcs/distributed/protobuf"
+	"github.com/nbcx/gcs/util"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 	"google.golang.org/grpc"
-	"gosh/base"
-	"gosh/distributed/protobuf"
 	"net"
 )
 
 type Server struct {
-}
-
-func setErr(rsp proto.Message, code uint32, message string) {
-
-	message = base.GetErrorMessage(code, message)
-	switch v := rsp.(type) {
-	case *protobuf.QueryUsersOnlineRsp:
-		v.RetCode = code
-		v.ErrMsg = message
-	case *protobuf.SendMsgRsp:
-		v.RetCode = code
-		v.ErrMsg = message
-	case *protobuf.SendMsgAllRsp:
-		v.RetCode = code
-		v.ErrMsg = message
-	case *protobuf.GetUserListRsp:
-		v.RetCode = code
-		v.ErrMsg = message
-	default:
-
-	}
-
 }
 
 // rpc Server
@@ -40,7 +17,7 @@ func setErr(rsp proto.Message, code uint32, message string) {
 func Start() {
 
 	rpcPort := viper.GetString("distributed.port")
-	serverIp := base.LocalIp
+	serverIp := util.LocalIp
 	log.Infof("rpc Server startup in %s:%s", serverIp, rpcPort)
 
 	lis, err := net.Listen("tcp", ":"+rpcPort)

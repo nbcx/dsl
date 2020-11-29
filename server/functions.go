@@ -1,7 +1,7 @@
 package server
 
 import (
-	"gosh/model"
+	"github.com/nbcx/gcs/model"
 )
 
 func IsLocal(server *model.Server) (isLocal bool) {

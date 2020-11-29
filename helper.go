@@ -1,34 +1,14 @@
-package base
+package gcs
 
 import (
 	"errors"
 	"fmt"
+	"github.com/nbcx/gcs/distributed/component"
 	"github.com/nbcx/gcs/model"
-	"github.com/spf13/viper"
-	"net"
+	"github.com/nbcx/gcs/util"
 	"strings"
 	"time"
 )
-
-// 获取服务器Ip
-func getServerIp() (ip string) {
-	addrs, err := net.InterfaceAddrs()
-
-	if err != nil {
-		return ""
-	}
-
-	for _, address := range addrs {
-		// 检查ip地址判断是否回环地址
-		if ipNet, ok := address.(*net.IPNet); ok && !ipNet.IP.IsLoopback() {
-			if ipNet.IP.To4() != nil {
-				ip = ipNet.IP.String()
-			}
-		}
-	}
-
-	return
-}
 
 func GetOrderIdTime() (orderId string) {
 
@@ -40,8 +20,8 @@ func GetOrderIdTime() (orderId string) {
 
 //对称加密IP和端口，当做clientId
 func GenClientId() string {
-	raw := []byte(LocalIp + ":" + viper.GetString("server.port"))
-	str, err := Encrypt(raw, []byte(viper.GetString("server.secret")))
+	raw := []byte(util.LocalIp + ":" + viper.GetString("server.port"))
+	str, err := util.Encrypt(raw, []byte(getSecret()))
 	if err != nil {
 		panic(err)
 	}
@@ -52,7 +32,7 @@ func GenClientId() string {
 //获取client key地址信息
 func GetAddrInfoAndIsLocal(clientId string) (addr string, host string, port string, isLocal bool, err error) {
 	//解密ClientId
-	addr, err = Decrypt(clientId, []byte(viper.GetString("server.secret")))
+	addr, err = util.Decrypt(clientId, []byte(getSecret()))
 	if err != nil {
 		return
 	}
@@ -68,7 +48,7 @@ func GetAddrInfoAndIsLocal(clientId string) (addr string, host string, port stri
 
 func GetServerAndIsLocal(fd string) (server *model.Server, isLocal bool, err error) {
 	//解密ClientId
-	addr, err := Decrypt(fd, []byte(viper.GetString("server.secret")))
+	addr, err := util.Decrypt(fd, []byte(getSecret()))
 	if err != nil {
 		return
 	}
@@ -101,15 +81,7 @@ func ParseRedisAddrValue(redisValue string) (host string, port string, err error
 
 //判断地址是否为本机
 func IsAddrLocal(host string, port string) bool {
-	return host == LocalIp && port == viper.GetString("server.port")
-}
-
-func LocalServer() (server *model.Server) {
-	server = &model.Server{
-		Ip:   LocalIp,
-		Port: viper.GetString("server.port"),
-	}
-	return
+	return host == util.LocalIp && port == viper.GetString("server.port")
 }
 
 func AddrToServer(addr string) (server *model.Server) {
@@ -119,11 +91,15 @@ func AddrToServer(addr string) (server *model.Server) {
 	}
 	ip := list[0]
 	if len(ip) < 1 {
-		ip = LocalIp
+		ip = util.LocalIp
 	}
 	server = &model.Server{
 		Ip:   ip,
 		Port: list[1],
 	}
 	return
+}
+
+func GetComponent() component.IComponent {
+	return iComponent
 }

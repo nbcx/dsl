@@ -7,7 +7,7 @@ import (
 type App struct {
 	Connections    map[string]IConnection // 全部的连接
 	ConnectionLock sync.RWMutex           // 读写锁
-	Users          map[string]IConnection // 登录的用户 // appId+uuid
+	Users          map[string]IConnection // 登录的用户 // AppId+uuid
 	UserLock       sync.RWMutex           // 读写锁
 	Groups         map[string][]string    // 分组连接
 	GroupLock      sync.RWMutex           // 读写锁
@@ -17,7 +17,7 @@ type App struct {
 func (a *App) JoinGroup(groupId string, c IConnection) {
 	a.GroupLock.Lock()
 	defer a.GroupLock.Unlock()
-	a.Groups[groupId] = append(a.Groups[groupId], c.Fd())
+	a.Groups[groupId] = append(a.Groups[groupId], c.GetFd())
 }
 
 // 退出组
@@ -26,7 +26,7 @@ func (a *App) ExitGroup(groupId string, c IConnection) {
 	defer a.GroupLock.Unlock()
 
 	for index, fd := range a.Groups[groupId] {
-		if fd == c.Fd() {
+		if fd == c.GetFd() {
 			a.Groups[groupId] = append(a.Groups[groupId][:index], a.Groups[groupId][index+1:]...)
 		}
 	}
@@ -44,13 +44,13 @@ func (a *App) ListGroup(groupId string) []string {
 func (a *App) Login(c IConnection) {
 	a.UserLock.Lock()
 	defer a.UserLock.Unlock()
-	a.Users[c.UID()] = c
+	a.Users[c.GetUid()] = c
 }
 
 func (a *App) Logout(c IConnection) {
 	a.UserLock.Lock()
 	defer a.UserLock.Unlock()
-	delete(a.Connections, c.UID())
+	delete(a.Connections, c.GetUid())
 }
 
 func (a *App) getUserConnection(uid string) (c IConnection) {
@@ -64,7 +64,7 @@ func (a *App) getUserConnection(uid string) (c IConnection) {
 func (a *App) add(c IConnection) {
 	a.ConnectionLock.Lock()
 	defer a.ConnectionLock.Unlock()
-	a.Connections[c.Fd()] = c
+	a.Connections[c.GetFd()] = c
 }
 
 // 客户端数量
@@ -79,17 +79,17 @@ func (a *App) del(c IConnection) {
 	a.ConnectionLock.RLock()
 	defer a.ConnectionLock.RUnlock()
 
-	delete(a.Connections, c.Fd())
+	delete(a.Connections, c.GetFd())
 
 	// 删除所在的分组
-	if len(c.Group()) > 0 {
-		for _, groupName := range c.Group() {
+	if len(c.GetGroup()) > 0 {
+		for _, groupName := range c.GetGroup() {
 			a.ExitGroup(groupName, c)
 		}
 	}
 
 	// 删除系统里的客户端
-	if len(c.UID()) > 0 {
+	if len(c.GetUid()) > 0 {
 		a.Logout(c)
 	}
 }

@@ -1,5 +1,7 @@
 package server
 
+import "time"
+
 const (
 	// 用户连接超时时间
 	heartbeatExpirationTime = 6 * 60
@@ -17,27 +19,65 @@ type BaseConnection struct {
 	loginTime     uint64   // 登录时间 登录以后才有
 }
 
-func (c *BaseConnection) AppId() string {
+func NewBaseConnection(appId, fd, addr string) *BaseConnection {
+	currentTime := uint64(time.Now().Unix())
+	return &BaseConnection{
+		appId:         appId,
+		fd:            fd,
+		addr:          addr,
+		firstTime:     currentTime,
+		heartbeatTime: currentTime,
+	}
+}
+func (c *BaseConnection) SetLoginTime(time uint64) {
+	c.loginTime = time
+}
+
+func (c *BaseConnection) GetLoginTime() uint64 {
+	return c.loginTime
+}
+
+func (c *BaseConnection) GetAppId() string {
 	return c.appId
 }
 
-func (c *BaseConnection) UID() string {
+func (c *BaseConnection) GetUid() string {
 	return c.uid
 }
 
-func (c *BaseConnection) Group() []string {
+func (c *BaseConnection) GetGroup() []string {
 	return c.group
 }
 
-func (c *BaseConnection) Fd() string {
+func (c *BaseConnection) GetFd() string {
 	return c.fd
 }
 
-func (c *BaseConnection) Addr() string {
+func (c *BaseConnection) GetAddr() string {
 	return c.addr
 }
 
+func (c *BaseConnection) SetAddr(addr string) {
+	c.addr = addr
+}
+
+func (c *BaseConnection) SetAppId(appId string) {
+	c.appId = appId
+}
+
+func (c *BaseConnection) SetFd(fd string) {
+	c.fd = fd
+}
+func (c *BaseConnection) SetUid(uid string) {
+	c.uid = uid
+}
+
+func (c *BaseConnection) SetGroup([]string) {
+
+}
+
 func (c *BaseConnection) Close() {
+
 }
 
 func (c *BaseConnection) Write(message []byte) {

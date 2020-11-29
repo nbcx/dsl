@@ -1,8 +1,8 @@
-package distributed
+package api
 
 import (
-	"gosh/base"
-	gserver "gosh/server"
+	"github.com/nbcx/gcs"
+	gserver "github.com/nbcx/gcs/server"
 )
 
 func Login(fd string, userId string) {
@@ -40,7 +40,7 @@ func BroadcastUid(appId, uid string, msg []byte) {
 	if c != nil {
 		c.Write(msg)
 	} else {
-		Remote.BroadcastUid(appId, uid, msg)
+		remote.BroadcastUid(appId, uid, msg)
 		//Remote.SendMsg()
 	}
 }
@@ -51,10 +51,10 @@ func BroadcastFd(fd string, msg []byte) {
 	if c != nil {
 		c.Write(msg)
 	} else {
-		s, isLocal, _ := base.GetServerAndIsLocal(fd)
+		s, isLocal, _ := gcs.GetServerAndIsLocal(fd)
 		if isLocal {
 			return
 		}
-		Remote.BroadcastFd(s, fd, msg)
+		remote.BroadcastFd(s, fd, msg)
 	}
 }

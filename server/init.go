@@ -1,11 +1,11 @@
 package server
 
 import (
-	"gosh/base"
+	"github.com/nbcx/gcs/util"
 )
 
 var (
 	clientManager = NewClientManager() // 管理者
-	serverIp      = base.LocalIp
+	serverIp      = util.LocalIp
 	serverPort    string
 )

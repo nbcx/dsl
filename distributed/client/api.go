@@ -1,7 +1,7 @@
 package client
 
 import (
-	"gosh/model"
+	"github.com/nbcx/gcs/model"
 )
 
 func (s *Remote) BroadcastFd(server *model.Server, fd string, msg []byte) (userIds []string, err error) {

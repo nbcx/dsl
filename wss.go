@@ -1,8 +1,9 @@
-package server
+package gcs
 
 import (
 	"fmt"
 	"github.com/gorilla/websocket"
+	"github.com/nbcx/gcs/util"
 	log "github.com/sirupsen/logrus"
 	"net/http"
 )
@@ -50,8 +51,8 @@ func (ws *WsServer) EventMessage(m Message) {
 
 // 用户建立连接事件
 func (ws *WsServer) EventRegister(o *open) {
-	clientManager.Add(o.connection)
-	fmt.Println("EventRegister 用户建立连接", o.connection.Addr)
+	Manager.Add(o.connection)
+	fmt.Println("EventRegister 用户建立连接", o.connection.GetAddr())
 	if ws.trigerOpen != nil {
 		ws.trigerOpen(o.connection, o.request)
 	}
@@ -59,9 +60,8 @@ func (ws *WsServer) EventRegister(o *open) {
 
 // 用户断开连接
 func (ws *WsServer) EventUnregister(c *WssConnection) {
-	app := clientManager.getApp(c.AppId())
-	app.del(c)
-	fmt.Println("EventUnregister 用户断开连接", c.addr, c.uid)
+	Manager.Del(c)
+	fmt.Println("EventUnregister 用户断开连接", c.GetAddr(), c.GetUid())
 	if ws.trigerClose != nil {
 		ws.trigerClose(c)
 	}
@@ -78,7 +78,7 @@ func (ws *WsServer) event() {
 			ws.EventUnregister(conn)
 		case message := <-ws.Message:
 			// 广播事件
-			for _, conn := range clientManager.Connections {
+			for _, conn := range Manager.Connections {
 				conn.Write(message)
 			}
 		}
@@ -113,9 +113,9 @@ func (ws *WsServer) upgrade(w http.ResponseWriter, req *http.Request) {
 
 // Websocket 服务启动
 func (ws *WsServer) Start() {
-	clientManager.start()
+	Manager.Start()
 	go ws.event() // 添加事件处理程序,管道处理程序
-	log.Infof("websocket server startup in %s:%s", serverIp, ws.addr)
+	log.Infof("websocket server startup in %s:%s", util.LocalIp, ws.addr)
 	http.HandleFunc("/", ws.upgrade)
 	http.ListenAndServe(ws.addr, nil)
 }

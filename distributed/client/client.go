@@ -2,22 +2,17 @@ package client
 
 import (
 	"context"
-	"errors"
 	"fmt"
+	"github.com/nbcx/gcs"
+	"github.com/nbcx/gcs/distributed/component"
+	"github.com/nbcx/gcs/distributed/protobuf"
+	"github.com/nbcx/gcs/model"
 	"google.golang.org/grpc"
-	"gosh/base"
-	"gosh/distributed/component"
-	"gosh/distributed/protobuf"
-	"gosh/model"
 	"time"
 )
 
 type Remote struct {
 	i component.IComponent
-}
-
-func (r *Remote) Use(i component.IComponent) {
-	r.i = i
 }
 
 func (r *Remote) GetComponent() (i component.IComponent) {
@@ -42,7 +37,7 @@ func (r *Remote) SendAll() (err error) {
 }
 
 func (r *Remote) IsLocal(server *model.Server) (isLocal bool) {
-	if server.Ip == base.LocalIp { //&& server.Port == serverPort
+	if server.Ip == gcs.LocalIp { //&& server.Port == serverPort
 		isLocal = true
 	}
 
@@ -81,12 +76,12 @@ func (s *Remote) Send(server *model.Server, seq string, userId string, cmd strin
 		return
 	}
 
-	if rsp.GetRetCode() != base.OK {
-		fmt.Println("发送消息", rsp.String())
-		err = errors.New(fmt.Sprintf("发送消息失败 code:%d", rsp.GetRetCode()))
-
-		return
-	}
+	//if rsp.GetRetCode() != base.OK {
+	//	fmt.Println("发送消息", rsp.String())
+	//	err = errors.New(fmt.Sprintf("发送消息失败 code:%d", rsp.GetRetCode()))
+	//
+	//	return
+	//}
 
 	sendMsgId = rsp.GetSendMsgId()
 	fmt.Println("发送消息 成功:", sendMsgId)
@@ -124,12 +119,12 @@ func (s *Remote) SendMsgAll(server *model.Server, seq string, userId string, cmd
 		return
 	}
 
-	if rsp.GetRetCode() != base.OK {
-		fmt.Println("给全体用户发送消息", rsp.String())
-		err = errors.New(fmt.Sprintf("发送消息失败 code:%d", rsp.GetRetCode()))
-
-		return
-	}
+	//if rsp.GetRetCode() != base.OK {
+	//	fmt.Println("给全体用户发送消息", rsp.String())
+	//	err = errors.New(fmt.Sprintf("发送消息失败 code:%d", rsp.GetRetCode()))
+	//
+	//	return
+	//}
 
 	sendMsgId = rsp.GetSendMsgId()
 	fmt.Println("给全体用户发送消息 成功:", sendMsgId)
@@ -164,12 +159,12 @@ func (s *Remote) GetUserList(server *model.Server, appId uint32) (userIds []stri
 		return
 	}
 
-	if rsp.GetRetCode() != base.OK {
-		fmt.Println("获取用户列表 返回码错误:", rsp.String())
-		err = errors.New(fmt.Sprintf("发送消息失败 code:%d", rsp.GetRetCode()))
-
-		return
-	}
+	//if rsp.GetRetCode() != base.OK {
+	//	fmt.Println("获取用户列表 返回码错误:", rsp.String())
+	//	err = errors.New(fmt.Sprintf("发送消息失败 code:%d", rsp.GetRetCode()))
+	//
+	//	return
+	//}
 
 	userIds = rsp.GetUserId()
 	fmt.Println("获取用户列表 成功:", userIds)

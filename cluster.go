@@ -1,12 +1,12 @@
-package distributed
+package gcs
 
 import (
+	"github.com/go-redis/redis"
+	"github.com/nbcx/gcs/distributed/component"
+	"github.com/nbcx/gcs/distributed/protobuf"
+	"github.com/nbcx/gcs/distributed/server"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
-	"gosh/base"
-	"gosh/distributed/component"
-	"gosh/distributed/protobuf"
-	"gosh/distributed/server"
 	"net"
 )
 
@@ -21,13 +21,26 @@ func NewCluster(addr string) *cluster {
 	}
 }
 
+func newRedisComponent(h H) *component.RedisComponent {
+	r := h.Get("redis")
+	if r == nil {
+		panic("redis parameter missing or wrong")
+	}
+	return &component.RedisComponent{
+		HashKey:    h.GetString("hashKey", "gosh:hash:servers"),
+		ExpireTime: h.GetUint64("expireTime", 2*60*60),
+		Timeout:    h.GetUint64("timeout", 3*60),
+		Store:      r.(*redis.Client),
+	}
+}
+
 // 注入服务发现组件
 func (c *cluster) Use(i component.IComponent) {
 	c.component = i
 }
 
 // 使用内置的服务发现组件
-func (c *cluster) UseBuiltIn(name string, option base.H) {
+func (c *cluster) UseBuiltIn(name string, option H) {
 	switch name {
 	case "redis":
 		c.useRedis(option)
@@ -38,12 +51,12 @@ func (c *cluster) UseBuiltIn(name string, option base.H) {
 	}
 }
 
-func (c *cluster) useRedis(option base.H) {
-	c.component = component.NewRedisComponent(option)
+func (c *cluster) useRedis(option H) {
+	c.component = newRedisComponent(option)
 }
 
-func (c *cluster) useEtcd(option base.H) {
-	c.component = component.NewRedisComponent(option)
+func (c *cluster) useEtcd(option H) {
+	c.component = newRedisComponent(option)
 }
 
 func (c *cluster) getComponent() (i component.IComponent) {
@@ -52,15 +65,13 @@ func (c *cluster) getComponent() (i component.IComponent) {
 
 // 开始集群服务
 func (c *cluster) Start() (err error) {
-	ser := base.AddrToServer(c.addr)
+	ser := AddrToServer(c.addr)
 
 	c.component.Register(ser)
 	c.component.Start()
 
-	Remote.Use(c.component)
+	iComponent = c.component
 
-	//rpcPort := viper.GetString("distributed.port")
-	//serverIp := base.LocalIp
 	log.Infof("rpc server startup in %s:%s", ser.Ip, ser.Port)
 
 	listen, err := net.Listen("tcp", ":"+ser.Port)

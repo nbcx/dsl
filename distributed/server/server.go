@@ -3,10 +3,8 @@ package server
 import (
 	"context"
 	"fmt"
-	"gosh/base"
-
 	//"gosh/client"
-	"gosh/distributed/protobuf"
+	"github.com/nbcx/gcs/distributed/protobuf"
 )
 
 // 处理用户登陆
@@ -26,7 +24,7 @@ func (s *Server) QueryUsersOnline(c context.Context, req *protobuf.QueryUsersOnl
 
 	//online := client.CheckUserOnline(req.GetUserId())
 
-	setErr(req, base.OK, "")
+	//setErr(req, base.OK, "")
 	//rsp.Online = online
 
 	return rsp, nil

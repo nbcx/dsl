@@ -1,6 +1,6 @@
 package component
 
-import "gosh/model"
+import "github.com/nbcx/gcs/model"
 
 type IComponent interface {
 	Start()

@@ -2,7 +2,7 @@ package server
 
 import (
 	"fmt"
-	"gosh/base"
+	"github.com/nbcx/gcs/util"
 	"sync"
 	"time"
 )
@@ -37,41 +37,34 @@ func (manager *ClientManager) getApp(appId string) (result *App) {
 	return
 }
 
-// 对连接进行标记
-func (manager *ClientManager) login(c IConnection) (result bool) {
-	app := manager.getApp(c.AppId())
-	app.Login(c)
-	return
-}
-
 func (manager *ClientManager) joinGroup(client IConnection, groupId string) (result bool) {
-	app := manager.getApp(client.AppId())
+	app := manager.getApp(client.GetAppId())
 	app.JoinGroup(groupId, client)
 	return
 }
 
 func (manager *ClientManager) exitGroup(groupId string, client IConnection) (result bool) {
-	app := manager.getApp(client.AppId())
+	app := manager.getApp(client.GetAppId())
 	app.ExitGroup(groupId, client)
 	return
 }
 
 // 删除客户端
 func (manager *ClientManager) Del(c IConnection) {
-	app := manager.getApp(c.AppId())
+	app := manager.getApp(c.GetAppId())
 	app.del(c)
 	manager.ConnectionLock.RLock()
 	defer manager.ConnectionLock.RUnlock()
-	delete(manager.Connections, c.Fd())
+	delete(manager.Connections, c.GetFd())
 }
 
 // 添加客户端
 func (manager *ClientManager) Add(c IConnection) {
-	app := manager.getApp(c.AppId())
+	app := manager.getApp(c.GetAppId())
 	app.add(c)
 	manager.ConnectionLock.Lock()
 	defer manager.ConnectionLock.Unlock()
-	manager.Connections[c.Fd()] = c
+	manager.Connections[c.GetFd()] = c
 }
 
 // 通过FD找到连接
@@ -132,7 +125,16 @@ func (manager *ClientManager) ClearTimeoutConnections(param interface{}) (result
 	return
 }
 
-func (manager *ClientManager) start() {
+func (manager *ClientManager) Start() {
 	// 定时清理不活跃连接
-	base.Timer(3*time.Second, 30*time.Second, manager.ClearTimeoutConnections, "", nil, nil)
+	util.Timer(3*time.Second, 30*time.Second, manager.ClearTimeoutConnections, "", nil, nil)
+}
+
+// 用户登录
+func (manager *ClientManager) Login(c IConnection, userId string, loginTime uint64) {
+	app := manager.getApp(c.GetAppId())
+	c.SetUid(userId)
+	c.SetLoginTime(loginTime)
+	c.Heartbeat(loginTime) // 登录成功=心跳一次
+	app.Login(c)
 }
