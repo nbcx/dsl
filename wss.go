@@ -9,18 +9,18 @@ import (
 	"net/http"
 )
 
-type Message func(client *wssConnection, message []byte)
-type Open func(client *wssConnection, r *http.Request)
-type Close func(client *wssConnection)
+type Message func(client *WssConnection, message []byte)
+type Open func(client *WssConnection, r *http.Request)
+type Close func(client *WssConnection)
 
 type open struct {
-	connection *wssConnection
+	connection *WssConnection
 	request    *http.Request
 }
 
 type wsServer struct {
 	Open          chan *open          // 连接处理
-	Close         chan *wssConnection // 断开连接处理程序
+	Close         chan *WssConnection // 断开连接处理程序
 	Message       chan []byte         // 广播向全部成员发送数据
 	trigerOpen    Open
 	trigerMessage Message
@@ -33,7 +33,7 @@ type wsServer struct {
 func NewWsServer(addr string) (wsSer *wsServer) {
 	wsSer = &wsServer{
 		Open:    make(chan *open, 1000),
-		Close:   make(chan *wssConnection, 1000),
+		Close:   make(chan *WssConnection, 1000),
 		Message: make(chan []byte, 1000),
 		addr:    addr,
 		server:  model.AddrToServer(addr),
@@ -68,7 +68,7 @@ func (ws *wsServer) EventRegister(o *open) {
 }
 
 // 用户断开连接
-func (ws *wsServer) EventUnregister(c *wssConnection) {
+func (ws *wsServer) EventUnregister(c *WssConnection) {
 	Manager.Del(c)
 	fmt.Println("EventUnregister 用户断开连接", c.GetAddr(), c.GetUid())
 	if ws.trigerClose != nil {
