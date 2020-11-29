@@ -6,6 +6,7 @@ import (
 	"github.com/nbcx/gcs/distributed/component"
 	"github.com/nbcx/gcs/model"
 	"github.com/nbcx/gcs/util"
+	"github.com/spf13/viper"
 	"strings"
 	"time"
 )
@@ -80,24 +81,29 @@ func ParseRedisAddrValue(redisValue string) (host string, port string, err error
 }
 
 //判断地址是否为本机
-func IsAddrLocal(host string, port string) bool {
-	return host == util.LocalIp && port == viper.GetString("server.port")
-}
+func IsLocalWithValue(server *model.Server) (is bool, value string) {
+	if server.Ip != util.LocalIp {
+		is = false
+		return
+	}
 
-func AddrToServer(addr string) (server *model.Server) {
-	list := strings.Split(addr, ":")
-	if len(list) != 2 {
-		panic("addr parameter wrong")
-	}
-	ip := list[0]
-	if len(ip) < 1 {
-		ip = util.LocalIp
-	}
-	server = &model.Server{
-		Ip:   ip,
-		Port: list[1],
+	if v, ok := localPorts[server.Port]; ok {
+		is = true
+		value = v
+		return
 	}
 	return
+}
+
+func IsLocal(server *model.Server) bool {
+	if server.Ip != util.LocalIp {
+		return false
+	}
+
+	if _, ok := localPorts[server.Port]; ok {
+		return true
+	}
+	return false
 }
 
 func GetComponent() component.IComponent {

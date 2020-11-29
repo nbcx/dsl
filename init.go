@@ -2,18 +2,14 @@ package gcs
 
 import (
 	"github.com/nbcx/gcs/distributed/component"
-	"github.com/nbcx/gcs/model"
 	"github.com/nbcx/gcs/server"
-	"github.com/nbcx/gcs/util"
 )
 
 var (
-	Manager     = server.NewClientManager() // 管理者
-	iComponent  component.IComponent
-	secret      string
-	localServer = &model.Server{
-		Ip: util.LocalIp,
-	}
+	Manager    = server.NewClientManager() // 管理者
+	iComponent component.IComponent
+	secret     string
+	localPorts = make(map[string]string)
 )
 
 func getSecret() string {

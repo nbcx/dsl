@@ -16,7 +16,7 @@ func SendUserMessageAll(appId, userId string, msgId, cmd, message string) (sendR
 	}
 
 	for _, server := range servers {
-		if IsLocal(server) {
+		if gcs.IsLocal(server) {
 			gcs.Manager.SendWithUser(appId, []byte(message))
 		} else {
 			remote.SendMsgAll(server, msgId, userId, cmd, message)

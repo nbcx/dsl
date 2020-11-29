@@ -3,54 +3,63 @@ package gcs
 import (
 	"fmt"
 	"github.com/gorilla/websocket"
+	"github.com/nbcx/gcs/model"
 	"github.com/nbcx/gcs/util"
 	log "github.com/sirupsen/logrus"
 	"net/http"
 )
 
-type Message func(client *WssConnection, message []byte)
-type Open func(client *WssConnection, r *http.Request)
-type Close func(client *WssConnection)
+type Message func(client *wssConnection, message []byte)
+type Open func(client *wssConnection, r *http.Request)
+type Close func(client *wssConnection)
 
 type open struct {
-	connection *WssConnection
+	connection *wssConnection
 	request    *http.Request
 }
 
-type WsServer struct {
+type wsServer struct {
 	Open          chan *open          // 连接处理
-	Close         chan *WssConnection // 断开连接处理程序
+	Close         chan *wssConnection // 断开连接处理程序
 	Message       chan []byte         // 广播向全部成员发送数据
 	trigerOpen    Open
 	trigerMessage Message
 	trigerClose   Close
 	addr          string
+	server        *model.Server
+	path          string
 }
 
-func NewWsServer(addr string) (wsServer *WsServer) {
-	wsServer = &WsServer{
+func NewWsServer(addr string) (wsSer *wsServer) {
+	wsSer = &wsServer{
 		Open:    make(chan *open, 1000),
-		Close:   make(chan *WssConnection, 1000),
+		Close:   make(chan *wssConnection, 1000),
 		Message: make(chan []byte, 1000),
 		addr:    addr,
+		server:  model.AddrToServer(addr),
+		path:    "/",
 	}
 	return
 }
 
-func (ws *WsServer) EventOpen(o Open) {
+func (ws *wsServer) SetPath(path string) {
+	ws.path = path
+}
+
+func (ws *wsServer) EventOpen(o Open) {
 	ws.trigerOpen = o
 }
 
-func (ws *WsServer) EventClose(c Close) {
+func (ws *wsServer) EventClose(c Close) {
 	ws.trigerClose = c
 }
 
-func (ws *WsServer) EventMessage(m Message) {
+func (ws *wsServer) EventMessage(m Message) {
 	ws.trigerMessage = m
 }
 
 // 用户建立连接事件
-func (ws *WsServer) EventRegister(o *open) {
+func (ws *wsServer) EventRegister(o *open) {
 	Manager.Add(o.connection)
 	fmt.Println("EventRegister 用户建立连接", o.connection.GetAddr())
 	if ws.trigerOpen != nil {
@@ -59,7 +68,7 @@ func (ws *WsServer) EventRegister(o *open) {
 }
 
 // 用户断开连接
-func (ws *WsServer) EventUnregister(c *WssConnection) {
+func (ws *wsServer) EventUnregister(c *wssConnection) {
 	Manager.Del(c)
 	fmt.Println("EventUnregister 用户断开连接", c.GetAddr(), c.GetUid())
 	if ws.trigerClose != nil {
@@ -67,7 +76,7 @@ func (ws *WsServer) EventUnregister(c *WssConnection) {
 	}
 }
 
-func (ws *WsServer) event() {
+func (ws *wsServer) event() {
 	for {
 		select {
 		case conn := <-ws.Open:
@@ -85,7 +94,7 @@ func (ws *WsServer) event() {
 	}
 }
 
-func (ws *WsServer) upgrade(w http.ResponseWriter, req *http.Request) {
+func (ws *wsServer) upgrade(w http.ResponseWriter, req *http.Request) {
 	var request *http.Request
 	// 升级协议
 	conn, err := (&websocket.Upgrader{CheckOrigin: func(r *http.Request) bool {
@@ -101,7 +110,7 @@ func (ws *WsServer) upgrade(w http.ResponseWriter, req *http.Request) {
 	}
 
 	log.Infof("%s connetion", conn.RemoteAddr().String())
-	client := NewWssConnection("hello", conn.RemoteAddr().String(), conn, ws)
+	client := newWssConnection("hello", conn.RemoteAddr().String(), conn, ws)
 	go client.read()
 
 	// 用户连接事件
@@ -112,10 +121,13 @@ func (ws *WsServer) upgrade(w http.ResponseWriter, req *http.Request) {
 }
 
 // Websocket 服务启动
-func (ws *WsServer) Start() {
+func (ws *wsServer) Start() {
 	Manager.Start()
 	go ws.event() // 添加事件处理程序,管道处理程序
+
+	localPorts[ws.server.Port] = "wss"
+
 	log.Infof("websocket server startup in %s:%s", util.LocalIp, ws.addr)
-	http.HandleFunc("/", ws.upgrade)
+	http.HandleFunc(ws.path, ws.upgrade)
 	http.ListenAndServe(ws.addr, nil)
 }

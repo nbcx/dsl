@@ -8,15 +8,15 @@ import (
 	"runtime/debug"
 )
 
-type WssConnection struct {
+type wssConnection struct {
 	*server.BaseConnection
 	Socket   *websocket.Conn // 用户连接
-	wsServer *WsServer
+	wsServer *wsServer
 }
 
 // 初始化
-func NewWssConnection(appId, addr string, socket *websocket.Conn, ws *WsServer) (client *WssConnection) {
-	client = &WssConnection{
+func newWssConnection(appId, addr string, socket *websocket.Conn, ws *wsServer) (client *wssConnection) {
+	client = &wssConnection{
 		BaseConnection: server.NewBaseConnection(appId, GenClientId(), addr),
 		Socket:         socket,
 		wsServer:       ws,
@@ -25,7 +25,7 @@ func NewWssConnection(appId, addr string, socket *websocket.Conn, ws *WsServer) 
 }
 
 // 读取客户端数据
-func (c *WssConnection) read() {
+func (c *wssConnection) read() {
 	defer func() {
 		if r := recover(); r != nil {
 			log.Error("write stop", string(debug.Stack()), r)
@@ -53,7 +53,7 @@ func (c *WssConnection) read() {
 }
 
 // 关闭客户端连接
-func (c *WssConnection) Close() {
+func (c *wssConnection) Close() {
 	if c == nil {
 		return
 	}
@@ -63,7 +63,7 @@ func (c *WssConnection) Close() {
 }
 
 // 直接向客户端写数据
-func (c *WssConnection) Write(message []byte) {
+func (c *wssConnection) Write(message []byte) {
 	if c == nil {
 		return
 	}
@@ -78,6 +78,6 @@ func (c *WssConnection) Write(message []byte) {
 }
 
 // 直接向客户端写数据
-func (c *WssConnection) WriteString(message string) {
+func (c *wssConnection) WriteString(message string) {
 	c.Write([]byte(message))
 }
