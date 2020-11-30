@@ -9,7 +9,7 @@ var (
 	Manager    = server.NewClientManager() // 管理者
 	iComponent component.IComponent
 	secret     string
-	localPorts = make(map[string]string)
+	local      = make(map[string]string)
 )
 
 func getSecret() string {

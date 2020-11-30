@@ -125,8 +125,6 @@ func (ws *wsServer) Start() {
 	Manager.Start()
 	go ws.event() // 添加事件处理程序,管道处理程序
 
-	localPorts[ws.server.Port] = "wss"
-
 	log.Infof("websocket server startup in %s:%s", util.LocalIp, ws.addr)
 	http.HandleFunc(ws.path, ws.upgrade)
 	http.ListenAndServe(ws.addr, nil)

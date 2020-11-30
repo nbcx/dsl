@@ -21,6 +21,9 @@ type RedisComponent struct {
 }
 
 func (s *RedisComponent) Start() {
+	if s.server == nil {
+		return
+	}
 	//注册本机信息到redis
 	util.Timer(2*time.Second, 60*time.Second, s.autoRenew, "", s.del, "")
 }

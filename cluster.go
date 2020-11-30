@@ -5,19 +5,22 @@ import (
 	"github.com/nbcx/gcs/distributed/component"
 	"github.com/nbcx/gcs/distributed/protobuf"
 	"github.com/nbcx/gcs/distributed/server"
+	"github.com/nbcx/gcs/model"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"net"
 )
 
 type cluster struct {
-	addr      string
-	component component.IComponent
+	addr        string
+	component   component.IComponent
+	supplyServe bool
 }
 
 func NewCluster(addr string) *cluster {
 	return &cluster{
-		addr: addr,
+		addr:        addr,
+		supplyServe: true,
 	}
 }
 
@@ -32,6 +35,11 @@ func newRedisComponent(h H) *component.RedisComponent {
 		Timeout:    h.GetUint64("timeout", 3*60),
 		Store:      r.(*redis.Client),
 	}
+}
+
+// 是否在集群内部提供服务
+func (c *cluster) SupplyServe(enable bool) {
+	c.supplyServe = enable
 }
 
 // 注入服务发现组件
@@ -65,12 +73,16 @@ func (c *cluster) getComponent() (i component.IComponent) {
 
 // 开始集群服务
 func (c *cluster) Start() (err error) {
-	ser := AddrToServer(c.addr)
+	ser := model.AddrToServer(c.addr)
 
-	c.component.Register(ser)
+	if c.supplyServe == true {
+		c.component.Register(ser)
+	}
+
 	c.component.Start()
-
 	iComponent = c.component
+
+	local[ser.Port] = "wss"
 
 	log.Infof("rpc server startup in %s:%s", ser.Ip, ser.Port)
 

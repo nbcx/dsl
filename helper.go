@@ -6,6 +6,7 @@ import (
 	"github.com/nbcx/gcs/distributed/component"
 	"github.com/nbcx/gcs/model"
 	"github.com/nbcx/gcs/util"
+	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 	"strings"
 	"time"
@@ -43,7 +44,8 @@ func GetAddrInfoAndIsLocal(clientId string) (addr string, host string, port stri
 		return
 	}
 
-	isLocal = IsAddrLocal(host, port)
+	server := model.NewServer(host, port)
+	isLocal = IsLocal(server)
 	return
 }
 
@@ -59,8 +61,8 @@ func GetServerAndIsLocal(fd string) (server *model.Server, isLocal bool, err err
 		return
 	}
 
-	isLocal = IsAddrLocal(host, port)
 	server = model.NewServer(host, port)
+	isLocal = IsLocal(server)
 	return
 }
 
@@ -87,7 +89,7 @@ func IsLocalWithValue(server *model.Server) (is bool, value string) {
 		return
 	}
 
-	if v, ok := localPorts[server.Port]; ok {
+	if v, ok := local[server.Port]; ok {
 		is = true
 		value = v
 		return
@@ -96,11 +98,13 @@ func IsLocalWithValue(server *model.Server) (is bool, value string) {
 }
 
 func IsLocal(server *model.Server) bool {
+	log.Info("%s ==  %s", server.Ip, util.LocalIp)
+	fmt.Println(local)
 	if server.Ip != util.LocalIp {
 		return false
 	}
 
-	if _, ok := localPorts[server.Port]; ok {
+	if _, ok := local[server.Port]; ok {
 		return true
 	}
 	return false
