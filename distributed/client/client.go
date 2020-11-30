@@ -3,10 +3,10 @@ package client
 import (
 	"context"
 	"fmt"
-	"github.com/nbcx/gcs"
 	"github.com/nbcx/gcs/distributed/component"
 	"github.com/nbcx/gcs/distributed/protobuf"
 	"github.com/nbcx/gcs/model"
+	"github.com/nbcx/gcs/util"
 	"google.golang.org/grpc"
 	"time"
 )
@@ -37,7 +37,7 @@ func (r *Remote) SendAll() (err error) {
 }
 
 func (r *Remote) IsLocal(server *model.Server) (isLocal bool) {
-	if server.Ip == gcs.LocalIp { //&& server.Port == serverPort
+	if server.Ip == util.LocalIp { //&& server.Port == serverPort
 		isLocal = true
 	}
 

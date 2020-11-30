@@ -13,24 +13,43 @@ service AccServer {
   rpc Login (LoginReq) returns (LoginRsp) {
   }
 
+  // 用户登出
+  rpc Logout (LoginReq) returns (LoginRsp) {
+  }
+
+
+
   // 向fd发送消息
-  rpc SendFd (SendMsgReq) returns (SendMsgRsp) {
+  rpc BroadcastFd (SendMsgReq) returns (SendMsgRsp) {
   }
 
   // 向用户发送消息
-  rpc SendUid (SendMsgReq) returns (SendMsgRsp) {
+  rpc BroadcastUid (SendMsgReq) returns (SendMsgRsp) {
+  }
+
+  // 向用户发送消息
+  rpc BroadcastUser (SendMsgReq) returns (SendMsgRsp) {
   }
 
   // 向组发送消息
-  rpc SendGroup (SendMsgReq) returns (SendMsgRsp) {
+  rpc BroadcastGroup (SendMsgReq) returns (SendMsgRsp) {
   }
 
   // 向app发送消息
-  rpc SendApp (SendMsgReq) returns (SendMsgRsp) {
+  rpc BroadcastApp (SendMsgReq) returns (SendMsgRsp) {
   }
 
   // 向所有连接发送消息
-  rpc SendAll (SendMsgReq) returns (SendMsgRsp) {
+  rpc BroadcastAll (SendMsgReq) returns (SendMsgRsp) {
+  }
+
+
+
+  // 加入组
+  rpc AddGroup (SendMsgReq) returns (SendMsgRsp) {
+  }
+  // 退出组
+  rpc QuitGroup (SendMsgReq) returns (SendMsgRsp) {
   }
 
 
