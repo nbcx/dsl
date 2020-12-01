@@ -5,7 +5,7 @@ import (
 	"github.com/nbcx/gcs/distributed/component"
 	"github.com/nbcx/gcs/distributed/protobuf"
 	"github.com/nbcx/gcs/distributed/server"
-	"github.com/nbcx/gcs/model"
+	"github.com/nbcx/gcs/util"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"net"
@@ -73,7 +73,7 @@ func (c *cluster) getComponent() (i component.IComponent) {
 
 // 开始集群服务
 func (c *cluster) Start() (err error) {
-	ser := model.AddrToServer(c.addr)
+	ser := util.AddrToServer(c.addr)
 
 	if c.supplyServe == true {
 		c.component.Register(ser)

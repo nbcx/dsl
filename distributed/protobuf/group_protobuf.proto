@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "io.grpc.examples.protobuf";
+option java_outer_classname = "ProtobufProto";
+
+
+package protobuf;
+
+service GroupServer {
+
+  // 加入组
+  rpc Join (GroupReq) returns (GroupRsp) {
+  }
+
+  // 退出组
+  rpc Quit (GroupReq) returns (GroupRsp) {
+  }
+
+  // 添加一个组
+  rpc Add (GroupReq) returns (GroupRsp) {
+  }
+
+  // 删除一个组
+  rpc Del (GroupReq) returns (GroupRsp) {
+  }
+}
+
+// 用户登陆
+message GroupReq {
+  string fd = 1; // ClientID
+  string gidd = 2; // 用户ID
+}
+
+message GroupRsp {
+  uint32 code = 1;
+  string message = 2;
+}

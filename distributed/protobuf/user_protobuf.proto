@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "io.grpc.examples.protobuf";
+option java_outer_classname = "ProtobufProto";
+
+
+package protobuf;
+
+service UserServer {
+  // 用户登陆
+  rpc Login (UserReq) returns (UserRsp) {
+  }
+
+  // 用户登出
+  rpc Logout (UserReq) returns (UserRsp) {
+  }
+}
+
+// 用户登陆
+message UserReq {
+  string fd = 1; // ClientID
+  string uid = 2; // 用户ID
+}
+
+message UserRsp {
+  uint32 code = 1;
+  string message = 2;
+}

@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"github.com/nbcx/gcs/distributed/component"
 	"github.com/nbcx/gcs/distributed/protobuf"
-	"github.com/nbcx/gcs/model"
 	"github.com/nbcx/gcs/util"
 	"google.golang.org/grpc"
 	"time"
@@ -36,7 +35,7 @@ func (r *Remote) SendAll() (err error) {
 	return
 }
 
-func (r *Remote) IsLocal(server *model.Server) (isLocal bool) {
+func (r *Remote) IsLocal(server *util.Server) (isLocal bool) {
 	if server.Ip == util.LocalIp { //&& server.Port == serverPort
 		isLocal = true
 	}
@@ -47,7 +46,7 @@ func (r *Remote) IsLocal(server *model.Server) (isLocal bool) {
 // Remote Remote
 // 发送消息
 // link::https://github.com/grpc/grpc-go/blob/master/examples/helloworld/greeter_client/main.go
-func (s *Remote) Send(server *model.Server, seq string, userId string, cmd string, msgType string, message string) (sendMsgId string, err error) {
+func (s *Remote) Send(server *util.Server, seq string, userId string, cmd string, msgType string, message string) (sendMsgId string, err error) {
 	// Set up a connection to the server.
 	conn, err := grpc.Dial(server.String(), grpc.WithInsecure())
 	if err != nil {
@@ -92,7 +91,7 @@ func (s *Remote) Send(server *model.Server, seq string, userId string, cmd strin
 // Remote Remote
 // 给全体用户发送消息
 // link::https://github.com/grpc/grpc-go/blob/master/examples/helloworld/greeter_client/main.go
-func (s *Remote) SendMsgAll(server *model.Server, seq string, userId string, cmd string, message string) (sendMsgId string, err error) {
+func (s *Remote) SendMsgAll(server *util.Server, seq string, userId string, cmd string, message string) (sendMsgId string, err error) {
 	// Set up a connection to the server.
 	conn, err := grpc.Dial(server.String(), grpc.WithInsecure())
 	if err != nil {
@@ -134,7 +133,7 @@ func (s *Remote) SendMsgAll(server *model.Server, seq string, userId string, cmd
 
 // 获取用户列表
 // link::https://github.com/grpc/grpc-go/blob/master/examples/helloworld/greeter_client/main.go
-func (s *Remote) GetUserList(server *model.Server, appId uint32) (userIds []string, err error) {
+func (s *Remote) GetUserList(server *util.Server, appId uint32) (userIds []string, err error) {
 	userIds = make([]string, 0)
 
 	conn, err := grpc.Dial(server.String(), grpc.WithInsecure())

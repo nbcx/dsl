@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "io.grpc.examples.protobuf";
+option java_outer_classname = "ProtobufProto";
+
+
+package protobuf;
+
+service ConnectionServer {
+
+  // 使连接断开
+  rpc Offline (ConnectionReq) returns (ConnectionRsp) {
+  }
+
+  // 获取连接信息
+  rpc Info (ConnectionReq) returns (ConnectionRsp) {
+  }
+
+}
+
+// 用户登陆
+message ConnectionReq {
+  string fd = 1; // ClientID
+  string uid = 2; // 用户ID
+}
+
+message ConnectionRsp {
+  uint32 code = 1;
+  string message = 2;
+}

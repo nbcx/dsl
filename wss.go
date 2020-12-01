@@ -3,7 +3,6 @@ package gcs
 import (
 	"fmt"
 	"github.com/gorilla/websocket"
-	"github.com/nbcx/gcs/model"
 	"github.com/nbcx/gcs/util"
 	log "github.com/sirupsen/logrus"
 	"net/http"
@@ -26,7 +25,7 @@ type wsServer struct {
 	trigerMessage Message
 	trigerClose   Close
 	addr          string
-	server        *model.Server
+	server        *util.Server
 	path          string
 }
 
@@ -36,7 +35,7 @@ func NewWsServer(addr string) (wsSer *wsServer) {
 		Close:   make(chan *WssConnection, 1000),
 		Message: make(chan []byte, 1000),
 		addr:    addr,
-		server:  model.AddrToServer(addr),
+		server:  util.AddrToServer(addr),
 		path:    "/",
 	}
 	return
