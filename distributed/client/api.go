@@ -8,7 +8,7 @@ func (s *Remote) BroadcastFd(server *util.Server, fd string, msg []byte) (userId
 	return
 }
 
-func (s *Remote) BroadcastUid(appId, uid string, msg []byte) (userIds []string, err error) {
+func (s *Remote) BroadcastUid(server *util.Server, appId, uid string, msg []byte) (userIds []string, err error) {
 
 	return
 }

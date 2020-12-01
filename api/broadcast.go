@@ -6,24 +6,49 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-func Send() {
+// 向指定连接ID发送数据
+func BroadcastFd(fd, message string) {
+	c := gcs.Manager.Find(fd)
+	if c != nil {
+		c.Write(message)
+		return
+	}
+
+	server, _, _ := gcs.GetServerAndIsLocal(fd)
+	remote.BroadcastFd(server, fd, []byte(message))
+}
+
+func BroadcastUid(appId, uid, message string) {
+	c := gcs.Manager.FindWithUid("appId", "uid")
+	if c != nil {
+		c.Write(message)
+		return
+	}
+
 	servers, err := gcs.GetComponent().GetAllServer()
 	if err != nil {
 		fmt.Println("给全体用户发消息", err)
 		return
 	}
+
 	for _, server := range servers {
 		if gcs.IsLocal(server) {
-			log.Info("local server")
-		} else {
-			log.Info("remote server")
-			remote.Send(server, "msgId", "userId", "cmd", "message", "ddd")
+			continue
 		}
+		remote.BroadcastUid(server, appId, uid, []byte(message))
 	}
 }
 
-// 给全体用户发消息
-func SendUserMessageAll(appId, userId string, msgId, cmd, message string) (sendResults bool, err error) {
+func BroadcastGroup() {
+
+}
+
+func BroadcastUser() {
+
+}
+
+// 向指定应用所有连接发送消息
+func BroadcastApp(appId, userId string, msgId, cmd, message string) (sendResults bool, err error) {
 	sendResults = true
 
 	servers, err := gcs.GetComponent().GetAllServer()
@@ -41,4 +66,20 @@ func SendUserMessageAll(appId, userId string, msgId, cmd, message string) (sendR
 	}
 
 	return
+}
+
+func BroadcastAll() {
+	servers, err := gcs.GetComponent().GetAllServer()
+	if err != nil {
+		fmt.Println("给全体用户发消息", err)
+		return
+	}
+	for _, server := range servers {
+		if gcs.IsLocal(server) {
+			log.Info("local server")
+		} else {
+			log.Info("remote server")
+			remote.Send(server, "msgId", "userId", "cmd", "message", "ddd")
+		}
+	}
 }
