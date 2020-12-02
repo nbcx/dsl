@@ -19,5 +19,6 @@ type IConnection interface {
 	Heartbeat(currentTime uint64)
 	Close()
 	JoinGroup(groupId string) (result bool)
-	Write(message []byte)
+	Write(message string)
+	WriteByte(message []byte)
 }

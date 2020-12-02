@@ -4,15 +4,14 @@ import (
 	"errors"
 	"fmt"
 	"github.com/nbcx/gcs/distributed/component"
-	"github.com/nbcx/gcs/model"
 	"github.com/nbcx/gcs/util"
+	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 	"strings"
 	"time"
 )
 
 func GetOrderIdTime() (orderId string) {
-
 	currentTime := time.Now().Nanosecond()
 	orderId = fmt.Sprintf("%d", currentTime)
 
@@ -43,11 +42,12 @@ func GetAddrInfoAndIsLocal(clientId string) (addr string, host string, port stri
 		return
 	}
 
-	isLocal = IsAddrLocal(host, port)
+	server := util.NewServer(host, port)
+	isLocal = IsLocal(server)
 	return
 }
 
-func GetServerAndIsLocal(fd string) (server *model.Server, isLocal bool, err error) {
+func GetServerAndIsLocal(fd string) (server *util.Server, isLocal bool, err error) {
 	//解密ClientId
 	addr, err := util.Decrypt(fd, []byte(getSecret()))
 	if err != nil {
@@ -59,8 +59,8 @@ func GetServerAndIsLocal(fd string) (server *model.Server, isLocal bool, err err
 		return
 	}
 
-	isLocal = IsAddrLocal(host, port)
-	server = model.NewServer(host, port)
+	server = util.NewServer(host, port)
+	isLocal = IsLocal(server)
 	return
 }
 
@@ -81,13 +81,13 @@ func ParseRedisAddrValue(redisValue string) (host string, port string, err error
 }
 
 //判断地址是否为本机
-func IsLocalWithValue(server *model.Server) (is bool, value string) {
+func IsLocalWithValue(server *util.Server) (is bool, value string) {
 	if server.Ip != util.LocalIp {
 		is = false
 		return
 	}
 
-	if v, ok := localPorts[server.Port]; ok {
+	if v, ok := local[server.Port]; ok {
 		is = true
 		value = v
 		return
@@ -95,12 +95,14 @@ func IsLocalWithValue(server *model.Server) (is bool, value string) {
 	return
 }
 
-func IsLocal(server *model.Server) bool {
+func IsLocal(server *util.Server) bool {
+	log.Info("%s ==  %s", server.Ip, util.LocalIp)
+	fmt.Println(local)
 	if server.Ip != util.LocalIp {
 		return false
 	}
 
-	if _, ok := localPorts[server.Port]; ok {
+	if _, ok := local[server.Port]; ok {
 		return true
 	}
 	return false

@@ -3,8 +3,8 @@ package server
 import (
 	"context"
 	"fmt"
-	//"gosh/client"
 	"github.com/nbcx/gcs/distributed/protobuf"
+	log "github.com/sirupsen/logrus"
 )
 
 // 处理用户登陆
@@ -33,8 +33,9 @@ func (s *Server) QueryUsersOnline(c context.Context, req *protobuf.QueryUsersOnl
 // 给本机用户发消息
 func (s *Server) SendMsg(c context.Context, req *protobuf.SendMsgReq) (rsp *protobuf.SendMsgRsp, err error) {
 
+	log.Info("hello s server:" + req.Cms)
 	//fmt.Println("grpc_request 给本机用户发消息", req.String())
-	//rsp = &protobuf.SendMsgRsp{}
+	rsp = &protobuf.SendMsgRsp{}
 	//if req.GetIsLocal() {
 	//
 	//	// 不支持
@@ -59,7 +60,8 @@ func (s *Server) SendMsg(c context.Context, req *protobuf.SendMsgReq) (rsp *prot
 	//	return rsp, nil
 	//}
 	//
-	//setErr(rsp, base.OK, "")
+	rsp.RetCode = 200
+	rsp.SendMsgId = "ddddd"
 	//
 	//fmt.Println("grpc_response 给本机用户发消息", rsp.String())
 	return

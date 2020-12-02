@@ -80,7 +80,10 @@ func (c *BaseConnection) Close() {
 
 }
 
-func (c *BaseConnection) Write(message []byte) {
+func (c *BaseConnection) Write(message string) {
+}
+
+func (c *BaseConnection) WriteByte(message []byte) {
 }
 
 // 用户心跳

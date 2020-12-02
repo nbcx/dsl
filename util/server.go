@@ -1,9 +1,8 @@
-package model
+package util
 
 import (
 	"errors"
 	"fmt"
-	"github.com/nbcx/gcs/util"
 	"strings"
 )
 
@@ -23,7 +22,7 @@ func AddrToServer(addr string) (server *Server) {
 	}
 	ip := list[0]
 	if len(ip) < 1 {
-		ip = util.LocalIp
+		ip = LocalIp
 	}
 	server = &Server{
 		Ip:   ip,
@@ -43,7 +42,7 @@ func (s *Server) String() (str string) {
 }
 
 func (s *Server) IsLocal() bool {
-	if s.Ip != util.LocalIp {
+	if s.Ip != LocalIp {
 		return false
 	}
 

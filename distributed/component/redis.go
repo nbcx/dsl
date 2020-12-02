@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/go-redis/redis"
-	"github.com/nbcx/gcs/model"
 	"github.com/nbcx/gcs/util"
 	log "github.com/sirupsen/logrus"
 	"runtime/debug"
@@ -13,7 +12,7 @@ import (
 )
 
 type RedisComponent struct {
-	server     *model.Server
+	server     *util.Server
 	HashKey    string // 在redids里存储全部的服务器的key
 	ExpireTime uint64 // hashKey过期时间
 	Timeout    uint64 // server地址过期时间，超过设置时间，则server地址不可用
@@ -21,22 +20,22 @@ type RedisComponent struct {
 }
 
 func (s *RedisComponent) Start() {
+	if s.server == nil {
+		return
+	}
 	//注册本机信息到redis
 	util.Timer(2*time.Second, 60*time.Second, s.autoRenew, "", s.del, "")
 }
 
 // 获取集群所有server地址
-func (s *RedisComponent) GetAllServer() (servers []*model.Server, err error) {
+func (s *RedisComponent) GetAllServer() (servers []*util.Server, err error) {
 
 	currentTime := uint64(time.Now().Unix())
-	servers = make([]*model.Server, 0)
+	servers = make([]*util.Server, 0)
 	key := s.HashKey
-
 	val, err := s.Store.Do("hGetAll", key).Result()
-
 	valByte, _ := json.Marshal(val)
 	fmt.Println("GetServerAll", key, string(valByte))
-
 	serverMap, err := s.Store.HGetAll(key).Result()
 	if err != nil {
 		fmt.Println("SetServerInfo", key, err)
@@ -47,17 +46,15 @@ func (s *RedisComponent) GetAllServer() (servers []*model.Server, err error) {
 		valueUint64, err := strconv.ParseUint(value, 10, 64)
 		if err != nil {
 			fmt.Println("GetServerAll", key, err)
-
 			return nil, err
 		}
 		// 超时
 		if valueUint64+s.Timeout <= currentTime {
 			continue
 		}
-		server, err := model.StringToServer(key)
+		server, err := util.StringToServer(key)
 		if err != nil {
 			fmt.Println("GetServerAll", key, err)
-
 			return nil, err
 		}
 		servers = append(servers, server)
@@ -67,7 +64,7 @@ func (s *RedisComponent) GetAllServer() (servers []*model.Server, err error) {
 }
 
 // 设置服务器信息
-func (s *RedisComponent) Register(server *model.Server) (err error) {
+func (s *RedisComponent) Register(server *util.Server) (err error) {
 	s.server = server
 	return s.set(server)
 }
@@ -87,25 +84,20 @@ func (s *RedisComponent) autoRenew(param interface{}) (result bool) {
 }
 
 // 将服务信息保存到redis
-func (s *RedisComponent) set(server *model.Server) (err error) {
+func (s *RedisComponent) set(server *util.Server) (err error) {
 	currentTime := uint64(time.Now().Unix())
-
 	value := fmt.Sprintf("%d", currentTime)
-
 	number, err := s.Store.Do("hSet", s.HashKey, server.String(), value).Int()
 	if err != nil {
 		fmt.Println("SetServerInfo", s.HashKey, number, err)
-
 		return
 	}
 
 	if number != 1 {
-
 		return
 	}
 
 	s.Store.Do("Expire", s.HashKey, s.ExpireTime)
-
 	return
 }
 

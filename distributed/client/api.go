@@ -1,23 +1,23 @@
 package client
 
 import (
-	"github.com/nbcx/gcs/model"
+	"github.com/nbcx/gcs/util"
 )
 
-func (s *Remote) BroadcastFd(server *model.Server, fd string, msg []byte) (userIds []string, err error) {
+func (s *Remote) BroadcastFd(server *util.Server, fd string, msg []byte) (userIds []string, err error) {
 	return
 }
 
-func (s *Remote) BroadcastUid(appId, uid string, msg []byte) (userIds []string, err error) {
+func (s *Remote) BroadcastUid(server *util.Server, appId, uid string, msg []byte) (userIds []string, err error) {
 
 	return
 }
 
-func (s *Remote) Login(server *model.Server, appId uint32) (userIds []string, err error) {
+func (s *Remote) Login(server *util.Server, appId uint32) (userIds []string, err error) {
 	return
 }
 
-func (s *Remote) JoinGroup(server *model.Server, groupId, appId string) (userIds []string, err error) {
+func (s *Remote) JoinGroup(server *util.Server, groupId, appId string) (userIds []string, err error) {
 	return
 }
 
