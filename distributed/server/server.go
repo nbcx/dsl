@@ -7,6 +7,9 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+type Server struct {
+}
+
 // 处理用户登陆
 func (s *Server) Login(c context.Context, req *protobuf.LoginReq) (rsp *protobuf.LoginRsp, err error) {
 

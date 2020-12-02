@@ -9,13 +9,7 @@ import (
 	"net"
 )
 
-type Server struct {
-}
-
-// rpc Server
-// link::https://github.com/grpc/grpc-go/blob/master/examples/helloworld/greeter_server/main.go
 func Start() {
-
 	rpcPort := viper.GetString("distributed.port")
 	serverIp := util.LocalIp
 	log.Infof("rpc Server startup in %s:%s", serverIp, rpcPort)
@@ -26,6 +20,7 @@ func Start() {
 	}
 	s := grpc.NewServer()
 	protobuf.RegisterAccServerServer(s, &Server{})
+	protobuf.RegisterGroupServerServer(s, &Group{})
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}

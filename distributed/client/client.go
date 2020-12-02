@@ -43,9 +43,7 @@ func (r *Remote) IsLocal(server *util.Server) (isLocal bool) {
 	return
 }
 
-// Remote Remote
 // 发送消息
-// link::https://github.com/grpc/grpc-go/blob/master/examples/helloworld/greeter_client/main.go
 func (s *Remote) Send(server *util.Server, seq string, userId string, cmd string, msgType string, message string) (sendMsgId string, err error) {
 	// Set up a connection to the server.
 	conn, err := grpc.Dial(server.String(), grpc.WithInsecure())
