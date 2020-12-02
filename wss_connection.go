@@ -63,7 +63,7 @@ func (c *WssConnection) Close() {
 }
 
 // 直接向客户端写数据
-func (c *WssConnection) Write(message []byte) {
+func (c *WssConnection) Write(message string) {
 	if c == nil {
 		return
 	}
@@ -74,10 +74,10 @@ func (c *WssConnection) Write(message []byte) {
 			fmt.Println("SendMsg stop:", r, string(debug.Stack()))
 		}
 	}()
-	c.Socket.WriteMessage(websocket.TextMessage, message)
+	c.WriteByte([]byte(message))
 }
 
 // 直接向客户端写数据
-func (c *WssConnection) WriteString(message string) {
-	c.Write([]byte(message))
+func (c *WssConnection) WriteByte(message []byte) {
+	c.Socket.WriteMessage(websocket.TextMessage, message)
 }

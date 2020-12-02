@@ -16,8 +16,8 @@ type ClientManager struct {
 	heartbeatIdleTime      int32                  // 设置一个TCP连接如果在10秒内未向服务器发送数据则被切断
 }
 
-func NewClientManager() (clientManager *ClientManager) {
-	clientManager = &ClientManager{
+func newManager() (manager *ClientManager) {
+	manager = &ClientManager{
 		Connections: make(map[string]IConnection),
 		apps:        make(map[string]*App),
 	}
@@ -85,7 +85,7 @@ func (manager *ClientManager) FindWithUid(appId, uid string) (c IConnection) {
 // 向服务器上所有连接发送消息
 func (manager *ClientManager) Send(msg []byte) {
 	for _, c := range manager.Connections {
-		c.Write(msg)
+		c.WriteByte(msg)
 	}
 }
 
@@ -94,7 +94,7 @@ func (manager *ClientManager) SendWithApp(appId string, msg []byte) {
 	app := manager.getApp(appId)
 
 	for _, c := range app.Connections {
-		c.Write(msg)
+		c.WriteByte(msg)
 	}
 }
 
@@ -110,7 +110,7 @@ func (manager *ClientManager) SendWithGroup(appId, gid string, msg []byte) {
 func (manager *ClientManager) SendWithUser(appId string, msg []byte) {
 	app := manager.getApp(appId)
 	for _, c := range app.Users {
-		fmt.Println(c)
+		c.WriteByte(msg)
 	}
 }
 
@@ -137,4 +137,13 @@ func (manager *ClientManager) Login(c IConnection, userId string, loginTime uint
 	c.SetLoginTime(loginTime)
 	c.Heartbeat(loginTime) // 登录成功=心跳一次
 	app.Login(c)
+}
+
+func (manager *ClientManager) Logout(c IConnection) {
+	app := manager.getApp(c.GetAppId())
+	c.SetUid("")
+	//c.SetLoginTime(loginTime)
+	//c.Heartbeat(loginTime) // 登录成功=心跳一次
+	//app.Login(c)
+	app.Logout(c)
 }

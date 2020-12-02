@@ -87,7 +87,7 @@ func (ws *wsServer) event() {
 		case message := <-ws.Message:
 			// 广播事件
 			for _, conn := range Manager.Connections {
-				conn.Write(message)
+				conn.WriteByte(message)
 			}
 		}
 	}

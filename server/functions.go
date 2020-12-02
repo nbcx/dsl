@@ -19,5 +19,5 @@ func Login(fd string, userId string) {
 }
 
 func GetManager() *ClientManager {
-	return clientManager
+	return manager
 }

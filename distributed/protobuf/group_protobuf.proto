@@ -29,7 +29,7 @@ service GroupServer {
 // 用户登陆
 message GroupReq {
   string fd = 1; // ClientID
-  string gidd = 2; // 用户ID
+  string gid = 2; // 用户ID
 }
 
 message GroupRsp {

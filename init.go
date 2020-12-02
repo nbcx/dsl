@@ -6,7 +6,7 @@ import (
 )
 
 var (
-	Manager    = server.NewClientManager() // 管理者
+	Manager    = server.GetManager() // 管理者
 	iComponent component.IComponent
 	secret     string
 	local      = make(map[string]string)

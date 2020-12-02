@@ -3,6 +3,7 @@ package api
 import (
 	"fmt"
 	"github.com/nbcx/gcs"
+	"github.com/nbcx/gcs/distributed/client"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -15,7 +16,7 @@ func BroadcastFd(fd, message string) {
 	}
 
 	server, _, _ := gcs.GetServerAndIsLocal(fd)
-	remote.BroadcastFd(server, fd, []byte(message))
+	client.BroadcastFd(server, fd, message)
 }
 
 func BroadcastUid(appId, uid, message string) {
@@ -35,7 +36,7 @@ func BroadcastUid(appId, uid, message string) {
 		if gcs.IsLocal(server) {
 			continue
 		}
-		remote.BroadcastUid(server, appId, uid, []byte(message))
+		client.BroadcastUid(server, appId, uid, message)
 	}
 }
 

@@ -113,7 +113,7 @@ func (c *BaseConnection) IsLogin() (isLogin bool) {
 
 // 加入组
 func (c *BaseConnection) JoinGroup(groupId string) (result bool) {
-	clientManager.joinGroup(c, groupId)
+	manager.joinGroup(c, groupId)
 	// 用户登录了
 	if c.uid != "" {
 		result = true

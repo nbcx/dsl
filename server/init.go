@@ -5,7 +5,7 @@ import (
 )
 
 var (
-	clientManager = NewClientManager() // 管理者
-	serverIp      = util.LocalIp
-	serverPort    string
+	manager    = newManager() // 管理者
+	serverIp   = util.LocalIp
+	serverPort string
 )
