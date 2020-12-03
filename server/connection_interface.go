@@ -18,7 +18,8 @@ type IConnection interface {
 	IsHeartbeatTimeout(currentTime uint64) (timeout bool)
 	Heartbeat(currentTime uint64)
 	Close()
-	JoinGroup(groupId string) (result bool)
+	JoinGroup(gids ...string) (err error)
+	ExitGroup(gids ...string) (err error)
 	Write(message string)
 	WriteByte(message []byte)
 }

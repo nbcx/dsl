@@ -22,8 +22,8 @@ func GroupJoin(server *util.Server, fd string, gid []string) {
 	defer cancel()
 
 	req := protobuf.GroupReq{
-		Fd:   fd,
-		Gidd: gid[0],
+		Fd:  fd,
+		Gid: gid[0],
 	}
 	rsp, err := c.Join(ctx, &req)
 	if err != nil {
@@ -58,8 +58,8 @@ func GroupQuit(server *util.Server, fd string, gid []string) {
 	defer cancel()
 
 	req := protobuf.GroupReq{
-		Fd:   fd,
-		Gidd: gid[0],
+		Fd:  fd,
+		Gid: gid[0],
 	}
 	rsp, err := c.Quit(ctx, &req)
 	if err != nil {

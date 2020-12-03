@@ -11,7 +11,7 @@ type Group struct {
 
 // 处理用户登陆
 func (s *Group) Join(cox context.Context, req *protobuf.GroupReq) (rsp *protobuf.GroupRsp, err error) {
-	gid := req.Gidd
+	gid := req.Gid
 	fd := req.Fd
 	c := server.GetManager().Find(fd)
 	if c == nil {
@@ -22,18 +22,22 @@ func (s *Group) Join(cox context.Context, req *protobuf.GroupReq) (rsp *protobuf
 	return
 }
 
-func (s *Group) Quit(c context.Context, req *protobuf.GroupReq) (rsp *protobuf.GroupRsp, err error) {
-
-	//websocket.LoginController()
+func (s *Group) Quit(ctx context.Context, req *protobuf.GroupReq) (rsp *protobuf.GroupRsp, err error) {
+	gid := req.Gid
+	fd := req.Fd
+	c := server.GetManager().Find(fd)
+	if c == nil {
+		rsp.Code = 500
+		return
+	}
+	c.JoinGroup(gid)
 	return
 }
 func (s *Group) Add(c context.Context, req *protobuf.GroupReq) (rsp *protobuf.GroupRsp, err error) {
 
-	//websocket.LoginController()
 	return
 }
 func (s *Group) Del(c context.Context, req *protobuf.GroupReq) (rsp *protobuf.GroupRsp, err error) {
 
-	//websocket.LoginController()
 	return
 }

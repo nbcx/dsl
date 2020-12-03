@@ -112,12 +112,17 @@ func (c *BaseConnection) IsLogin() (isLogin bool) {
 }
 
 // 加入组
-func (c *BaseConnection) JoinGroup(groupId string) (result bool) {
-	manager.joinGroup(c, groupId)
-	// 用户登录了
-	if c.uid != "" {
-		result = true
-		return
+func (c *BaseConnection) JoinGroup(gids ...string) (err error) {
+	for _, gid := range gids {
+		manager.joinGroup(c, gid)
+	}
+	return
+}
+
+// 加入组
+func (c *BaseConnection) ExitGroup(gids ...string) (err error) {
+	for _, gid := range gids {
+		manager.exitGroup(c, gid)
 	}
 	return
 }

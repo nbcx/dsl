@@ -43,7 +43,7 @@ func (manager *ClientManager) joinGroup(client IConnection, groupId string) (res
 	return
 }
 
-func (manager *ClientManager) exitGroup(groupId string, client IConnection) (result bool) {
+func (manager *ClientManager) exitGroup(client IConnection, groupId string) (result bool) {
 	app := manager.getApp(client.GetAppId())
 	app.ExitGroup(groupId, client)
 	return
