@@ -14,13 +14,15 @@ func BroadcastFd(fd, message string) {
 		c.Write(message)
 		return
 	}
-
-	server, _, _ := gcs.GetServerAndIsLocal(fd)
+	server, isLocal, _ := gcs.GetServerAndIsLocal(fd)
+	if isLocal {
+		return
+	}
 	client.BroadcastFd(server, fd, message)
 }
 
 func BroadcastUid(appId, uid, message string) {
-	c := gcs.Manager.FindWithUid("appId", "uid")
+	c := gcs.Manager.FindWithUid(appId, uid)
 	if c != nil {
 		c.Write(message)
 		return
