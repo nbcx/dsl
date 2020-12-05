@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-func GroupJoin(server *util.Server, fd string, gid []string) {
+func GroupJoin(server *util.Server, fd string, gid ...string) {
 	conn, err := grpc.Dial(server.String(), grpc.WithInsecure())
 	if err != nil {
 		fmt.Println("连接失败", server.String())
@@ -45,7 +45,7 @@ func GroupJoin(server *util.Server, fd string, gid []string) {
 
 }
 
-func GroupQuit(server *util.Server, fd string, gid []string) {
+func GroupQuit(server *util.Server, fd string, gid ...string) {
 	conn, err := grpc.Dial(server.String(), grpc.WithInsecure())
 	if err != nil {
 		fmt.Println("连接失败", server.String())

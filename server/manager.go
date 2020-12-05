@@ -99,10 +99,12 @@ func (manager *ClientManager) SendWithApp(appId string, msg []byte) {
 }
 
 // 向指定分组发送消息
-func (manager *ClientManager) SendWithGroup(appId, gid string, msg []byte) {
+func (manager *ClientManager) SendWithGroup(appId string, gids []string, msg []byte) {
 	app := manager.getApp(appId)
-	for _, c := range app.Groups[gid] {
-		fmt.Println(c)
+	for _, gid := range gids {
+		for _, c := range app.Groups[gid] {
+			fmt.Println(c)
+		}
 	}
 }
 

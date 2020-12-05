@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/nbcx/gcs"
 	"github.com/nbcx/gcs/distributed/client"
-	log "github.com/sirupsen/logrus"
 )
 
 // 向指定连接ID发送数据
@@ -42,36 +41,55 @@ func BroadcastUid(appId, uid, message string) {
 	}
 }
 
-func BroadcastGroup() {
-
+func BroadcastGroup(appId string, message string, gids ...string) {
+	gcs.Manager.SendWithGroup(appId, gids, []byte(message))
+	servers, err := gcs.GetComponent().GetAllServer()
+	if err != nil {
+		fmt.Println("给全体用户发消息", err)
+		return
+	}
+	for _, server := range servers {
+		if gcs.IsLocal(server) {
+			continue
+		}
+		client.BroadcastGroup(server, appId, gids, message)
+	}
 }
 
-func BroadcastUser() {
-
+func BroadcastUser(appId string, message string) {
+	gcs.Manager.SendWithUser(appId, []byte(message))
+	servers, err := gcs.GetComponent().GetAllServer()
+	if err != nil {
+		fmt.Println("给全体用户发消息", err)
+		return
+	}
+	for _, server := range servers {
+		if gcs.IsLocal(server) {
+			continue
+		}
+		client.BroadcastUser(server, appId, message)
+	}
 }
 
 // 向指定应用所有连接发送消息
-func BroadcastApp(appId, userId string, msgId, cmd, message string) (sendResults bool, err error) {
-	sendResults = true
-
+func BroadcastApp(appId, message string) (sendResults bool, err error) {
+	gcs.Manager.SendWithApp(appId, []byte(message))
 	servers, err := gcs.GetComponent().GetAllServer()
 	if err != nil {
 		fmt.Println("给全体用户发消息", err)
 		return
 	}
-
 	for _, server := range servers {
 		if gcs.IsLocal(server) {
-			gcs.Manager.SendWithUser(appId, []byte(message))
-		} else {
-			remote.SendMsgAll(server, msgId, userId, cmd, message)
+			continue
 		}
+		client.BroadcastApp(server, appId, message)
 	}
-
 	return
 }
 
-func BroadcastAll() {
+func BroadcastAll(message string) {
+	gcs.Manager.Send([]byte(message))
 	servers, err := gcs.GetComponent().GetAllServer()
 	if err != nil {
 		fmt.Println("给全体用户发消息", err)
@@ -79,10 +97,9 @@ func BroadcastAll() {
 	}
 	for _, server := range servers {
 		if gcs.IsLocal(server) {
-			log.Info("local server")
-		} else {
-			log.Info("remote server")
-			remote.Send(server, "msgId", "userId", "cmd", "message", "ddd")
+			continue
 		}
+		client.BroadcastAll(server, message)
 	}
+	return
 }
