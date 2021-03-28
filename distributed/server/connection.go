@@ -3,8 +3,8 @@ package server
 import (
 	"context"
 	"fmt"
-	"github.com/nbcx/gcs/distributed/protobuf"
-	"github.com/nbcx/gcs/server"
+	"github.com/nbcx/dsl/distributed/protobuf"
+	"github.com/nbcx/dsl/server"
 )
 
 type Connection struct {

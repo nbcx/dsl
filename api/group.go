@@ -21,7 +21,7 @@ func GroupJoin(aid, fd string, gid ...string) {
 	if isLocal {
 		return
 	}
-	client.GroupJoin(server, fd, gid)
+	client.GroupJoin(server, fd, gid...)
 }
 
 func GroupQuit(aid, fd string, gid ...string) {
@@ -39,7 +39,7 @@ func GroupQuit(aid, fd string, gid ...string) {
 	if isLocal {
 		return
 	}
-	client.GroupQuit(server, fd, gid)
+	client.GroupQuit(server, fd, gid...)
 }
 
 func GroupDel(aid string, gid ...string) {

@@ -1,8 +1,8 @@
 package api
 
 import (
-	"github.com/nbcx/gcs"
-	"github.com/nbcx/gcs/distributed/client"
+	"github.com/nbcx/dsl"
+	"github.com/nbcx/dsl/distributed/client"
 )
 
 func ConnectionOffine(fd string) {
