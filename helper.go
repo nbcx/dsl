@@ -3,36 +3,33 @@ package gcs
 import (
 	"errors"
 	"fmt"
-	"github.com/nbcx/gcs/distributed/component"
-	"github.com/nbcx/gcs/util"
+	"github.com/nbcx/dsl/distributed/component"
+	"github.com/nbcx/dsl/util"
 	log "github.com/sirupsen/logrus"
-	"github.com/spf13/viper"
+	"strconv"
 	"strings"
-	"time"
 )
 
-func GetOrderIdTime() (orderId string) {
-	currentTime := time.Now().Nanosecond()
-	orderId = fmt.Sprintf("%d", currentTime)
-
-	return
-}
-
 //对称加密IP和端口，当做clientId
-func GenClientId() string {
-	raw := []byte(util.LocalIp + ":" + viper.GetString("server.port"))
-	str, err := util.Encrypt(raw, []byte(getSecret()))
+func GenClientId(ip string, port int) string {
+	raw := util.Str2bytes(fmt.Sprintf("%s:%d", ip, port))
+	str, err := util.Encrypt(raw, util.Str2bytes(getSecret()))
 	if err != nil {
 		panic(err)
 	}
-
 	return str
 }
 
+func GenFd() string {
+	cluster := GetCluster()
+	fmt.Println("GenFd:", cluster.ip, ":", cluster.port)
+	return GenClientId(cluster.ip, cluster.port)
+}
+
 //获取client key地址信息
-func GetAddrInfoAndIsLocal(clientId string) (addr string, host string, port string, isLocal bool, err error) {
+func GetAddrInfoAndIsLocal(fd string) (addr string, host string, port int, isLocal bool, err error) {
 	//解密ClientId
-	addr, err = util.Decrypt(clientId, []byte(getSecret()))
+	addr, err = util.Decrypt(fd, util.Str2bytes(getSecret()))
 	if err != nil {
 		return
 	}
@@ -49,34 +46,33 @@ func GetAddrInfoAndIsLocal(clientId string) (addr string, host string, port stri
 
 func GetServerAndIsLocal(fd string) (server *util.Server, isLocal bool, err error) {
 	//解密ClientId
-	addr, err := util.Decrypt(fd, []byte(getSecret()))
+	addr, err := util.Decrypt(fd, util.Str2bytes(getSecret()))
 	if err != nil {
+		fmt.Println("GetServerAndIsLocal Err:", err)
 		return
 	}
-
 	host, port, err := ParseRedisAddrValue(addr)
 	if err != nil {
 		return
 	}
-
 	server = util.NewServer(host, port)
 	isLocal = IsLocal(server)
 	return
 }
 
-//解析redis的地址格式
-func ParseRedisAddrValue(redisValue string) (host string, port string, err error) {
-	if redisValue == "" {
-		err = errors.New("解析地址错误")
+//解析addr的地址格式
+func ParseRedisAddrValue(addr string) (host string, port int, err error) {
+	if addr == "" {
+		err = errors.New("解析地址错误,不能为空")
 		return
 	}
-	addr := strings.Split(redisValue, ":")
-	if len(addr) != 2 {
-		err = errors.New("解析地址错误")
+	addrs := strings.Split(addr, ":")
+	if len(addrs) != 2 {
+		err = errors.New(fmt.Sprintf("解析地址错误，格式错误:%s", addr))
 		return
 	}
-	host, port = addr[0], addr[1]
-
+	port, _ = strconv.Atoi(addrs[1])
+	host = addrs[0]
 	return
 }
 
@@ -96,8 +92,7 @@ func IsLocalWithValue(server *util.Server) (is bool, value string) {
 }
 
 func IsLocal(server *util.Server) bool {
-	log.Info("%s ==  %s", server.Ip, util.LocalIp)
-	fmt.Println(local)
+	log.Info("IsLocal:", server.Ip, "-", util.LocalIp)
 	if server.Ip != util.LocalIp {
 		return false
 	}

@@ -7,7 +7,7 @@ option java_outer_classname = "ProtobufProto";
 
 package protobuf;
 
-service UserServer {
+service User {
   // 用户登陆
   rpc Login (UserReq) returns (UserRsp) {
   }

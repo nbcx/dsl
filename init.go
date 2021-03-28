@@ -1,15 +1,15 @@
 package gcs
 
 import (
-	"github.com/nbcx/gcs/distributed/component"
-	"github.com/nbcx/gcs/server"
+	"github.com/nbcx/dsl/distributed/component"
+	"github.com/nbcx/dsl/server"
 )
 
 var (
 	Manager    = server.GetManager() // 管理者
 	iComponent component.IComponent
 	secret     string
-	local      = make(map[string]string)
+	local      = make(map[int]string)
 )
 
 func getSecret() string {

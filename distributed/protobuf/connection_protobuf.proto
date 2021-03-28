@@ -7,7 +7,7 @@ option java_outer_classname = "ProtobufProto";
 
 package protobuf;
 
-service ConnectionServer {
+service Connection {
 
   // 使连接断开
   rpc Offline (ConnectionReq) returns (ConnectionRsp) {

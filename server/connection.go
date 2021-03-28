@@ -72,10 +72,6 @@ func (c *BaseConnection) SetUid(uid string) {
 	c.uid = uid
 }
 
-func (c *BaseConnection) SetGroup([]string) {
-
-}
-
 func (c *BaseConnection) Close() {
 
 }
@@ -97,7 +93,6 @@ func (c *BaseConnection) IsHeartbeatTimeout(currentTime uint64) (timeout bool) {
 	if c.heartbeatTime+heartbeatExpirationTime <= currentTime {
 		timeout = true
 	}
-
 	return
 }
 

@@ -1,37 +1,22 @@
 package api
 
 import (
-	"github.com/nbcx/gcs"
-	"github.com/nbcx/gcs/distributed/client"
+	"github.com/nbcx/dsl"
+	"github.com/nbcx/dsl/server"
 )
 
-func UserLogin(fd, uid string) {
-	c := gcs.Manager.Find(fd)
-	if c != nil {
-		// todo
-		gcs.Manager.Login(c, uid, 12323223232)
-		return
-	}
+func Login(fd string, userId string) {
 
-	server, isLocal, _ := gcs.GetServerAndIsLocal(fd)
-	if isLocal {
-		return
-	}
-	client.UserLogin(server, fd, uid)
+	//如果是本机
+	server.Login(fd, userId)
+	//如果非本机
+	//Remote.Login()
 }
 
 func Logout(fd string) {
-
 	c := gcs.Manager.Find(fd)
 	if c != nil {
 		gcs.Manager.Logout(c)
 		return
 	}
-
-	server, isLocal, _ := gcs.GetServerAndIsLocal(fd)
-	if isLocal {
-		return
-	}
-	client.UserLogout(server, fd)
-
 }

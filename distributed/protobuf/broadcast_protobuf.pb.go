@@ -35,12 +35,8 @@ type BroadcastReq struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Seq     string `protobuf:"bytes,1,opt,name=seq,proto3" json:"seq,omitempty"`          // 序列号
-	UserId  string `protobuf:"bytes,3,opt,name=userId,proto3" json:"userId,omitempty"`    // 用户ID
-	Cms     string `protobuf:"bytes,4,opt,name=cms,proto3" json:"cms,omitempty"`          // cms 动作: msg/enter/exit
-	Type    string `protobuf:"bytes,5,opt,name=type,proto3" json:"type,omitempty"`        // type 消息类型，默认是 text
-	Msg     string `protobuf:"bytes,6,opt,name=msg,proto3" json:"msg,omitempty"`          // msg
-	IsLocal bool   `protobuf:"varint,7,opt,name=isLocal,proto3" json:"isLocal,omitempty"` // 是否查询本机 acc内部调用为:true(本机查询不到即结束)
+	Seq     string `protobuf:"bytes,1,opt,name=seq,proto3" json:"seq,omitempty"`         // 序列号
+	Message string `protobuf:"bytes,3,opt,name=message,proto3" json:"message,omitempty"` // 消息内容
 }
 
 func (x *BroadcastReq) Reset() {
@@ -82,39 +78,287 @@ func (x *BroadcastReq) GetSeq() string {
 	return ""
 }
 
-func (x *BroadcastReq) GetUserId() string {
+func (x *BroadcastReq) GetMessage() string {
 	if x != nil {
-		return x.UserId
+		return x.Message
 	}
 	return ""
 }
 
-func (x *BroadcastReq) GetCms() string {
+type BroadcastAppReq struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Seq     string `protobuf:"bytes,1,opt,name=seq,proto3" json:"seq,omitempty"`         // 序列号
+	Aid     string `protobuf:"bytes,2,opt,name=aid,proto3" json:"aid,omitempty"`         // 应用ID
+	Message string `protobuf:"bytes,3,opt,name=message,proto3" json:"message,omitempty"` // msg
+}
+
+func (x *BroadcastAppReq) Reset() {
+	*x = BroadcastAppReq{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_broadcast_protobuf_proto_msgTypes[1]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *BroadcastAppReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BroadcastAppReq) ProtoMessage() {}
+
+func (x *BroadcastAppReq) ProtoReflect() protoreflect.Message {
+	mi := &file_broadcast_protobuf_proto_msgTypes[1]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BroadcastAppReq.ProtoReflect.Descriptor instead.
+func (*BroadcastAppReq) Descriptor() ([]byte, []int) {
+	return file_broadcast_protobuf_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *BroadcastAppReq) GetSeq() string {
 	if x != nil {
-		return x.Cms
+		return x.Seq
 	}
 	return ""
 }
 
-func (x *BroadcastReq) GetType() string {
+func (x *BroadcastAppReq) GetAid() string {
 	if x != nil {
-		return x.Type
+		return x.Aid
 	}
 	return ""
 }
 
-func (x *BroadcastReq) GetMsg() string {
+func (x *BroadcastAppReq) GetMessage() string {
 	if x != nil {
-		return x.Msg
+		return x.Message
 	}
 	return ""
 }
 
-func (x *BroadcastReq) GetIsLocal() bool {
-	if x != nil {
-		return x.IsLocal
+type BroadcastFdReq struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Seq     string `protobuf:"bytes,1,opt,name=seq,proto3" json:"seq,omitempty"`         // 序列号
+	Aid     string `protobuf:"bytes,2,opt,name=aid,proto3" json:"aid,omitempty"`         // 应用ID
+	Fd      string `protobuf:"bytes,3,opt,name=fd,proto3" json:"fd,omitempty"`           // 链接ID
+	Message string `protobuf:"bytes,4,opt,name=message,proto3" json:"message,omitempty"` // msg
+}
+
+func (x *BroadcastFdReq) Reset() {
+	*x = BroadcastFdReq{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_broadcast_protobuf_proto_msgTypes[2]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
 	}
-	return false
+}
+
+func (x *BroadcastFdReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BroadcastFdReq) ProtoMessage() {}
+
+func (x *BroadcastFdReq) ProtoReflect() protoreflect.Message {
+	mi := &file_broadcast_protobuf_proto_msgTypes[2]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BroadcastFdReq.ProtoReflect.Descriptor instead.
+func (*BroadcastFdReq) Descriptor() ([]byte, []int) {
+	return file_broadcast_protobuf_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *BroadcastFdReq) GetSeq() string {
+	if x != nil {
+		return x.Seq
+	}
+	return ""
+}
+
+func (x *BroadcastFdReq) GetAid() string {
+	if x != nil {
+		return x.Aid
+	}
+	return ""
+}
+
+func (x *BroadcastFdReq) GetFd() string {
+	if x != nil {
+		return x.Fd
+	}
+	return ""
+}
+
+func (x *BroadcastFdReq) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+type BroadcastUidReq struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Seq     string `protobuf:"bytes,1,opt,name=seq,proto3" json:"seq,omitempty"`         // 序列号
+	Aid     string `protobuf:"bytes,2,opt,name=aid,proto3" json:"aid,omitempty"`         // 应用ID
+	Uid     string `protobuf:"bytes,3,opt,name=uid,proto3" json:"uid,omitempty"`         // 用户ID
+	Message string `protobuf:"bytes,4,opt,name=message,proto3" json:"message,omitempty"` // msg
+}
+
+func (x *BroadcastUidReq) Reset() {
+	*x = BroadcastUidReq{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_broadcast_protobuf_proto_msgTypes[3]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *BroadcastUidReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BroadcastUidReq) ProtoMessage() {}
+
+func (x *BroadcastUidReq) ProtoReflect() protoreflect.Message {
+	mi := &file_broadcast_protobuf_proto_msgTypes[3]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BroadcastUidReq.ProtoReflect.Descriptor instead.
+func (*BroadcastUidReq) Descriptor() ([]byte, []int) {
+	return file_broadcast_protobuf_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *BroadcastUidReq) GetSeq() string {
+	if x != nil {
+		return x.Seq
+	}
+	return ""
+}
+
+func (x *BroadcastUidReq) GetAid() string {
+	if x != nil {
+		return x.Aid
+	}
+	return ""
+}
+
+func (x *BroadcastUidReq) GetUid() string {
+	if x != nil {
+		return x.Uid
+	}
+	return ""
+}
+
+func (x *BroadcastUidReq) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+type BroadcastGroupReq struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Seq     string `protobuf:"bytes,1,opt,name=seq,proto3" json:"seq,omitempty"`         // 序列号
+	Aid     string `protobuf:"bytes,2,opt,name=aid,proto3" json:"aid,omitempty"`         // 应用ID
+	Gid     string `protobuf:"bytes,3,opt,name=gid,proto3" json:"gid,omitempty"`         // 组ID
+	Message string `protobuf:"bytes,4,opt,name=message,proto3" json:"message,omitempty"` // msg
+}
+
+func (x *BroadcastGroupReq) Reset() {
+	*x = BroadcastGroupReq{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_broadcast_protobuf_proto_msgTypes[4]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *BroadcastGroupReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BroadcastGroupReq) ProtoMessage() {}
+
+func (x *BroadcastGroupReq) ProtoReflect() protoreflect.Message {
+	mi := &file_broadcast_protobuf_proto_msgTypes[4]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BroadcastGroupReq.ProtoReflect.Descriptor instead.
+func (*BroadcastGroupReq) Descriptor() ([]byte, []int) {
+	return file_broadcast_protobuf_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *BroadcastGroupReq) GetSeq() string {
+	if x != nil {
+		return x.Seq
+	}
+	return ""
+}
+
+func (x *BroadcastGroupReq) GetAid() string {
+	if x != nil {
+		return x.Aid
+	}
+	return ""
+}
+
+func (x *BroadcastGroupReq) GetGid() string {
+	if x != nil {
+		return x.Gid
+	}
+	return ""
+}
+
+func (x *BroadcastGroupReq) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
 }
 
 type BroadcastRsp struct {
@@ -122,15 +366,15 @@ type BroadcastRsp struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	RetCode   uint32 `protobuf:"varint,1,opt,name=retCode,proto3" json:"retCode,omitempty"`
-	ErrMsg    string `protobuf:"bytes,2,opt,name=errMsg,proto3" json:"errMsg,omitempty"`
-	SendMsgId string `protobuf:"bytes,3,opt,name=sendMsgId,proto3" json:"sendMsgId,omitempty"`
+	Code    uint32 `protobuf:"varint,1,opt,name=code,proto3" json:"code,omitempty"`
+	Message string `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	Seq     string `protobuf:"bytes,3,opt,name=seq,proto3" json:"seq,omitempty"`
 }
 
 func (x *BroadcastRsp) Reset() {
 	*x = BroadcastRsp{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_broadcast_protobuf_proto_msgTypes[1]
+		mi := &file_broadcast_protobuf_proto_msgTypes[5]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -143,7 +387,7 @@ func (x *BroadcastRsp) String() string {
 func (*BroadcastRsp) ProtoMessage() {}
 
 func (x *BroadcastRsp) ProtoReflect() protoreflect.Message {
-	mi := &file_broadcast_protobuf_proto_msgTypes[1]
+	mi := &file_broadcast_protobuf_proto_msgTypes[5]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -156,26 +400,26 @@ func (x *BroadcastRsp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BroadcastRsp.ProtoReflect.Descriptor instead.
 func (*BroadcastRsp) Descriptor() ([]byte, []int) {
-	return file_broadcast_protobuf_proto_rawDescGZIP(), []int{1}
+	return file_broadcast_protobuf_proto_rawDescGZIP(), []int{5}
 }
 
-func (x *BroadcastRsp) GetRetCode() uint32 {
+func (x *BroadcastRsp) GetCode() uint32 {
 	if x != nil {
-		return x.RetCode
+		return x.Code
 	}
 	return 0
 }
 
-func (x *BroadcastRsp) GetErrMsg() string {
+func (x *BroadcastRsp) GetMessage() string {
 	if x != nil {
-		return x.ErrMsg
+		return x.Message
 	}
 	return ""
 }
 
-func (x *BroadcastRsp) GetSendMsgId() string {
+func (x *BroadcastRsp) GetSeq() string {
 	if x != nil {
-		return x.SendMsgId
+		return x.Seq
 	}
 	return ""
 }
@@ -185,48 +429,62 @@ var File_broadcast_protobuf_proto protoreflect.FileDescriptor
 var file_broadcast_protobuf_proto_rawDesc = []byte{
 	0x0a, 0x18, 0x62, 0x72, 0x6f, 0x61, 0x64, 0x63, 0x61, 0x73, 0x74, 0x5f, 0x70, 0x72, 0x6f, 0x74,
 	0x6f, 0x62, 0x75, 0x66, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x08, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x62, 0x75, 0x66, 0x22, 0x8a, 0x01, 0x0a, 0x0c, 0x42, 0x72, 0x6f, 0x61, 0x64, 0x63, 0x61,
-	0x73, 0x74, 0x52, 0x65, 0x71, 0x12, 0x10, 0x0a, 0x03, 0x73, 0x65, 0x71, 0x18, 0x01, 0x20, 0x01,
-	0x28, 0x09, 0x52, 0x03, 0x73, 0x65, 0x71, 0x12, 0x16, 0x0a, 0x06, 0x75, 0x73, 0x65, 0x72, 0x49,
-	0x64, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x75, 0x73, 0x65, 0x72, 0x49, 0x64, 0x12,
-	0x10, 0x0a, 0x03, 0x63, 0x6d, 0x73, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x63, 0x6d,
-	0x73, 0x12, 0x12, 0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52,
-	0x04, 0x74, 0x79, 0x70, 0x65, 0x12, 0x10, 0x0a, 0x03, 0x6d, 0x73, 0x67, 0x18, 0x06, 0x20, 0x01,
-	0x28, 0x09, 0x52, 0x03, 0x6d, 0x73, 0x67, 0x12, 0x18, 0x0a, 0x07, 0x69, 0x73, 0x4c, 0x6f, 0x63,
-	0x61, 0x6c, 0x18, 0x07, 0x20, 0x01, 0x28, 0x08, 0x52, 0x07, 0x69, 0x73, 0x4c, 0x6f, 0x63, 0x61,
-	0x6c, 0x22, 0x5e, 0x0a, 0x0c, 0x42, 0x72, 0x6f, 0x61, 0x64, 0x63, 0x61, 0x73, 0x74, 0x52, 0x73,
-	0x70, 0x12, 0x18, 0x0a, 0x07, 0x72, 0x65, 0x74, 0x43, 0x6f, 0x64, 0x65, 0x18, 0x01, 0x20, 0x01,
-	0x28, 0x0d, 0x52, 0x07, 0x72, 0x65, 0x74, 0x43, 0x6f, 0x64, 0x65, 0x12, 0x16, 0x0a, 0x06, 0x65,
-	0x72, 0x72, 0x4d, 0x73, 0x67, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x65, 0x72, 0x72,
-	0x4d, 0x73, 0x67, 0x12, 0x1c, 0x0a, 0x09, 0x73, 0x65, 0x6e, 0x64, 0x4d, 0x73, 0x67, 0x49, 0x64,
-	0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x73, 0x65, 0x6e, 0x64, 0x4d, 0x73, 0x67, 0x49,
-	0x64, 0x32, 0xe9, 0x02, 0x0a, 0x0f, 0x42, 0x72, 0x6f, 0x61, 0x64, 0x63, 0x61, 0x73, 0x74, 0x53,
-	0x65, 0x72, 0x76, 0x65, 0x72, 0x12, 0x36, 0x0a, 0x02, 0x46, 0x64, 0x12, 0x16, 0x2e, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x42, 0x72, 0x6f, 0x61, 0x64, 0x63, 0x61, 0x73, 0x74,
+	0x6f, 0x62, 0x75, 0x66, 0x22, 0x3a, 0x0a, 0x0c, 0x42, 0x72, 0x6f, 0x61, 0x64, 0x63, 0x61, 0x73,
+	0x74, 0x52, 0x65, 0x71, 0x12, 0x10, 0x0a, 0x03, 0x73, 0x65, 0x71, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x09, 0x52, 0x03, 0x73, 0x65, 0x71, 0x12, 0x18, 0x0a, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67,
+	0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65,
+	0x22, 0x4f, 0x0a, 0x0f, 0x42, 0x72, 0x6f, 0x61, 0x64, 0x63, 0x61, 0x73, 0x74, 0x41, 0x70, 0x70,
+	0x52, 0x65, 0x71, 0x12, 0x10, 0x0a, 0x03, 0x73, 0x65, 0x71, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x03, 0x73, 0x65, 0x71, 0x12, 0x10, 0x0a, 0x03, 0x61, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x03, 0x61, 0x69, 0x64, 0x12, 0x18, 0x0a, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61,
+	0x67, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67,
+	0x65, 0x22, 0x5e, 0x0a, 0x0e, 0x42, 0x72, 0x6f, 0x61, 0x64, 0x63, 0x61, 0x73, 0x74, 0x46, 0x64,
+	0x52, 0x65, 0x71, 0x12, 0x10, 0x0a, 0x03, 0x73, 0x65, 0x71, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x03, 0x73, 0x65, 0x71, 0x12, 0x10, 0x0a, 0x03, 0x61, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x03, 0x61, 0x69, 0x64, 0x12, 0x0e, 0x0a, 0x02, 0x66, 0x64, 0x18, 0x03, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x02, 0x66, 0x64, 0x12, 0x18, 0x0a, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61,
+	0x67, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67,
+	0x65, 0x22, 0x61, 0x0a, 0x0f, 0x42, 0x72, 0x6f, 0x61, 0x64, 0x63, 0x61, 0x73, 0x74, 0x55, 0x69,
+	0x64, 0x52, 0x65, 0x71, 0x12, 0x10, 0x0a, 0x03, 0x73, 0x65, 0x71, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x09, 0x52, 0x03, 0x73, 0x65, 0x71, 0x12, 0x10, 0x0a, 0x03, 0x61, 0x69, 0x64, 0x18, 0x02, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x03, 0x61, 0x69, 0x64, 0x12, 0x10, 0x0a, 0x03, 0x75, 0x69, 0x64, 0x18,
+	0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x75, 0x69, 0x64, 0x12, 0x18, 0x0a, 0x07, 0x6d, 0x65,
+	0x73, 0x73, 0x61, 0x67, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x6d, 0x65, 0x73,
+	0x73, 0x61, 0x67, 0x65, 0x22, 0x63, 0x0a, 0x11, 0x42, 0x72, 0x6f, 0x61, 0x64, 0x63, 0x61, 0x73,
+	0x74, 0x47, 0x72, 0x6f, 0x75, 0x70, 0x52, 0x65, 0x71, 0x12, 0x10, 0x0a, 0x03, 0x73, 0x65, 0x71,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x73, 0x65, 0x71, 0x12, 0x10, 0x0a, 0x03, 0x61,
+	0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x61, 0x69, 0x64, 0x12, 0x10, 0x0a,
+	0x03, 0x67, 0x69, 0x64, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x67, 0x69, 0x64, 0x12,
+	0x18, 0x0a, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x22, 0x4e, 0x0a, 0x0c, 0x42, 0x72, 0x6f,
+	0x61, 0x64, 0x63, 0x61, 0x73, 0x74, 0x52, 0x73, 0x70, 0x12, 0x12, 0x0a, 0x04, 0x63, 0x6f, 0x64,
+	0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x04, 0x63, 0x6f, 0x64, 0x65, 0x12, 0x18, 0x0a,
+	0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07,
+	0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x12, 0x10, 0x0a, 0x03, 0x73, 0x65, 0x71, 0x18, 0x03,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x73, 0x65, 0x71, 0x32, 0xb6, 0x02, 0x0a, 0x09, 0x42, 0x72,
+	0x6f, 0x61, 0x64, 0x63, 0x61, 0x73, 0x74, 0x12, 0x38, 0x0a, 0x02, 0x46, 0x64, 0x12, 0x18, 0x2e,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x42, 0x72, 0x6f, 0x61, 0x64, 0x63, 0x61,
+	0x73, 0x74, 0x46, 0x64, 0x52, 0x65, 0x71, 0x1a, 0x16, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62,
+	0x75, 0x66, 0x2e, 0x42, 0x72, 0x6f, 0x61, 0x64, 0x63, 0x61, 0x73, 0x74, 0x52, 0x73, 0x70, 0x22,
+	0x00, 0x12, 0x3a, 0x0a, 0x03, 0x55, 0x69, 0x64, 0x12, 0x19, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x62, 0x75, 0x66, 0x2e, 0x42, 0x72, 0x6f, 0x61, 0x64, 0x63, 0x61, 0x73, 0x74, 0x55, 0x69, 0x64,
 	0x52, 0x65, 0x71, 0x1a, 0x16, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x42,
-	0x72, 0x6f, 0x61, 0x64, 0x63, 0x61, 0x73, 0x74, 0x52, 0x73, 0x70, 0x22, 0x00, 0x12, 0x37, 0x0a,
-	0x03, 0x55, 0x69, 0x64, 0x12, 0x16, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e,
-	0x42, 0x72, 0x6f, 0x61, 0x64, 0x63, 0x61, 0x73, 0x74, 0x52, 0x65, 0x71, 0x1a, 0x16, 0x2e, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x42, 0x72, 0x6f, 0x61, 0x64, 0x63, 0x61, 0x73,
-	0x74, 0x52, 0x73, 0x70, 0x22, 0x00, 0x12, 0x38, 0x0a, 0x04, 0x55, 0x73, 0x65, 0x72, 0x12, 0x16,
-	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x42, 0x72, 0x6f, 0x61, 0x64, 0x63,
-	0x61, 0x73, 0x74, 0x52, 0x65, 0x71, 0x1a, 0x16, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75,
-	0x66, 0x2e, 0x42, 0x72, 0x6f, 0x61, 0x64, 0x63, 0x61, 0x73, 0x74, 0x52, 0x73, 0x70, 0x22, 0x00,
-	0x12, 0x39, 0x0a, 0x05, 0x47, 0x72, 0x6f, 0x75, 0x70, 0x12, 0x16, 0x2e, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x62, 0x75, 0x66, 0x2e, 0x42, 0x72, 0x6f, 0x61, 0x64, 0x63, 0x61, 0x73, 0x74, 0x52, 0x65,
-	0x71, 0x1a, 0x16, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x42, 0x72, 0x6f,
-	0x61, 0x64, 0x63, 0x61, 0x73, 0x74, 0x52, 0x73, 0x70, 0x22, 0x00, 0x12, 0x37, 0x0a, 0x03, 0x41,
-	0x70, 0x70, 0x12, 0x16, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x42, 0x72,
-	0x6f, 0x61, 0x64, 0x63, 0x61, 0x73, 0x74, 0x52, 0x65, 0x71, 0x1a, 0x16, 0x2e, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x42, 0x72, 0x6f, 0x61, 0x64, 0x63, 0x61, 0x73, 0x74, 0x52,
-	0x73, 0x70, 0x22, 0x00, 0x12, 0x37, 0x0a, 0x03, 0x41, 0x6c, 0x6c, 0x12, 0x16, 0x2e, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x42, 0x72, 0x6f, 0x61, 0x64, 0x63, 0x61, 0x73, 0x74,
+	0x72, 0x6f, 0x61, 0x64, 0x63, 0x61, 0x73, 0x74, 0x52, 0x73, 0x70, 0x22, 0x00, 0x12, 0x3e, 0x0a,
+	0x05, 0x47, 0x72, 0x6f, 0x75, 0x70, 0x12, 0x1b, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75,
+	0x66, 0x2e, 0x42, 0x72, 0x6f, 0x61, 0x64, 0x63, 0x61, 0x73, 0x74, 0x47, 0x72, 0x6f, 0x75, 0x70,
 	0x52, 0x65, 0x71, 0x1a, 0x16, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x42,
-	0x72, 0x6f, 0x61, 0x64, 0x63, 0x61, 0x73, 0x74, 0x52, 0x73, 0x70, 0x22, 0x00, 0x42, 0x2c, 0x0a,
-	0x19, 0x69, 0x6f, 0x2e, 0x67, 0x72, 0x70, 0x63, 0x2e, 0x65, 0x78, 0x61, 0x6d, 0x70, 0x6c, 0x65,
-	0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x42, 0x0d, 0x50, 0x72, 0x6f, 0x74,
-	0x6f, 0x62, 0x75, 0x66, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x62, 0x06, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x33,
+	0x72, 0x6f, 0x61, 0x64, 0x63, 0x61, 0x73, 0x74, 0x52, 0x73, 0x70, 0x22, 0x00, 0x12, 0x3a, 0x0a,
+	0x03, 0x41, 0x70, 0x70, 0x12, 0x19, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e,
+	0x42, 0x72, 0x6f, 0x61, 0x64, 0x63, 0x61, 0x73, 0x74, 0x41, 0x70, 0x70, 0x52, 0x65, 0x71, 0x1a,
+	0x16, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x42, 0x72, 0x6f, 0x61, 0x64,
+	0x63, 0x61, 0x73, 0x74, 0x52, 0x73, 0x70, 0x22, 0x00, 0x12, 0x37, 0x0a, 0x03, 0x41, 0x6c, 0x6c,
+	0x12, 0x16, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x42, 0x72, 0x6f, 0x61,
+	0x64, 0x63, 0x61, 0x73, 0x74, 0x52, 0x65, 0x71, 0x1a, 0x16, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x62, 0x75, 0x66, 0x2e, 0x42, 0x72, 0x6f, 0x61, 0x64, 0x63, 0x61, 0x73, 0x74, 0x52, 0x73, 0x70,
+	0x22, 0x00, 0x42, 0x2c, 0x0a, 0x19, 0x69, 0x6f, 0x2e, 0x67, 0x72, 0x70, 0x63, 0x2e, 0x65, 0x78,
+	0x61, 0x6d, 0x70, 0x6c, 0x65, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x42,
+	0x0d, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01,
+	0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -241,26 +499,28 @@ func file_broadcast_protobuf_proto_rawDescGZIP() []byte {
 	return file_broadcast_protobuf_proto_rawDescData
 }
 
-var file_broadcast_protobuf_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_broadcast_protobuf_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_broadcast_protobuf_proto_goTypes = []interface{}{
-	(*BroadcastReq)(nil), // 0: protobuf.BroadcastReq
-	(*BroadcastRsp)(nil), // 1: protobuf.BroadcastRsp
+	(*BroadcastReq)(nil),      // 0: protobuf.BroadcastReq
+	(*BroadcastAppReq)(nil),   // 1: protobuf.BroadcastAppReq
+	(*BroadcastFdReq)(nil),    // 2: protobuf.BroadcastFdReq
+	(*BroadcastUidReq)(nil),   // 3: protobuf.BroadcastUidReq
+	(*BroadcastGroupReq)(nil), // 4: protobuf.BroadcastGroupReq
+	(*BroadcastRsp)(nil),      // 5: protobuf.BroadcastRsp
 }
 var file_broadcast_protobuf_proto_depIdxs = []int32{
-	0, // 0: protobuf.BroadcastServer.Fd:input_type -> protobuf.BroadcastReq
-	0, // 1: protobuf.BroadcastServer.Uid:input_type -> protobuf.BroadcastReq
-	0, // 2: protobuf.BroadcastServer.User:input_type -> protobuf.BroadcastReq
-	0, // 3: protobuf.BroadcastServer.Group:input_type -> protobuf.BroadcastReq
-	0, // 4: protobuf.BroadcastServer.App:input_type -> protobuf.BroadcastReq
-	0, // 5: protobuf.BroadcastServer.All:input_type -> protobuf.BroadcastReq
-	1, // 6: protobuf.BroadcastServer.Fd:output_type -> protobuf.BroadcastRsp
-	1, // 7: protobuf.BroadcastServer.Uid:output_type -> protobuf.BroadcastRsp
-	1, // 8: protobuf.BroadcastServer.User:output_type -> protobuf.BroadcastRsp
-	1, // 9: protobuf.BroadcastServer.Group:output_type -> protobuf.BroadcastRsp
-	1, // 10: protobuf.BroadcastServer.App:output_type -> protobuf.BroadcastRsp
-	1, // 11: protobuf.BroadcastServer.All:output_type -> protobuf.BroadcastRsp
-	6, // [6:12] is the sub-list for method output_type
-	0, // [0:6] is the sub-list for method input_type
+	2, // 0: protobuf.Broadcast.Fd:input_type -> protobuf.BroadcastFdReq
+	3, // 1: protobuf.Broadcast.Uid:input_type -> protobuf.BroadcastUidReq
+	4, // 2: protobuf.Broadcast.Group:input_type -> protobuf.BroadcastGroupReq
+	1, // 3: protobuf.Broadcast.App:input_type -> protobuf.BroadcastAppReq
+	0, // 4: protobuf.Broadcast.All:input_type -> protobuf.BroadcastReq
+	5, // 5: protobuf.Broadcast.Fd:output_type -> protobuf.BroadcastRsp
+	5, // 6: protobuf.Broadcast.Uid:output_type -> protobuf.BroadcastRsp
+	5, // 7: protobuf.Broadcast.Group:output_type -> protobuf.BroadcastRsp
+	5, // 8: protobuf.Broadcast.App:output_type -> protobuf.BroadcastRsp
+	5, // 9: protobuf.Broadcast.All:output_type -> protobuf.BroadcastRsp
+	5, // [5:10] is the sub-list for method output_type
+	0, // [0:5] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -285,6 +545,54 @@ func file_broadcast_protobuf_proto_init() {
 			}
 		}
 		file_broadcast_protobuf_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*BroadcastAppReq); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_broadcast_protobuf_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*BroadcastFdReq); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_broadcast_protobuf_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*BroadcastUidReq); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_broadcast_protobuf_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*BroadcastGroupReq); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_broadcast_protobuf_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*BroadcastRsp); i {
 			case 0:
 				return &v.state
@@ -303,7 +611,7 @@ func file_broadcast_protobuf_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_broadcast_protobuf_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
@@ -325,264 +633,226 @@ var _ grpc.ClientConnInterface
 // is compatible with the grpc package it is being compiled against.
 const _ = grpc.SupportPackageIsVersion6
 
-// BroadcastServerClient is the client API for BroadcastServer service.
+// BroadcastClient is the client API for Broadcast service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
-type BroadcastServerClient interface {
+type BroadcastClient interface {
 	// 向fd发送消息
-	Fd(ctx context.Context, in *BroadcastReq, opts ...grpc.CallOption) (*BroadcastRsp, error)
+	Fd(ctx context.Context, in *BroadcastFdReq, opts ...grpc.CallOption) (*BroadcastRsp, error)
 	// 向用户发送消息
-	Uid(ctx context.Context, in *BroadcastReq, opts ...grpc.CallOption) (*BroadcastRsp, error)
-	// 向用户发送消息
-	User(ctx context.Context, in *BroadcastReq, opts ...grpc.CallOption) (*BroadcastRsp, error)
+	Uid(ctx context.Context, in *BroadcastUidReq, opts ...grpc.CallOption) (*BroadcastRsp, error)
 	// 向组发送消息
-	Group(ctx context.Context, in *BroadcastReq, opts ...grpc.CallOption) (*BroadcastRsp, error)
+	Group(ctx context.Context, in *BroadcastGroupReq, opts ...grpc.CallOption) (*BroadcastRsp, error)
 	// 向app发送消息
-	App(ctx context.Context, in *BroadcastReq, opts ...grpc.CallOption) (*BroadcastRsp, error)
+	App(ctx context.Context, in *BroadcastAppReq, opts ...grpc.CallOption) (*BroadcastRsp, error)
 	// 向所有连接发送消息
 	All(ctx context.Context, in *BroadcastReq, opts ...grpc.CallOption) (*BroadcastRsp, error)
 }
 
-type broadcastServerClient struct {
+type broadcastClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewBroadcastServerClient(cc grpc.ClientConnInterface) BroadcastServerClient {
-	return &broadcastServerClient{cc}
+func NewBroadcastClient(cc grpc.ClientConnInterface) BroadcastClient {
+	return &broadcastClient{cc}
 }
 
-func (c *broadcastServerClient) Fd(ctx context.Context, in *BroadcastReq, opts ...grpc.CallOption) (*BroadcastRsp, error) {
+func (c *broadcastClient) Fd(ctx context.Context, in *BroadcastFdReq, opts ...grpc.CallOption) (*BroadcastRsp, error) {
 	out := new(BroadcastRsp)
-	err := c.cc.Invoke(ctx, "/protobuf.BroadcastServer/Fd", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/protobuf.Broadcast/Fd", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *broadcastServerClient) Uid(ctx context.Context, in *BroadcastReq, opts ...grpc.CallOption) (*BroadcastRsp, error) {
+func (c *broadcastClient) Uid(ctx context.Context, in *BroadcastUidReq, opts ...grpc.CallOption) (*BroadcastRsp, error) {
 	out := new(BroadcastRsp)
-	err := c.cc.Invoke(ctx, "/protobuf.BroadcastServer/Uid", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/protobuf.Broadcast/Uid", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *broadcastServerClient) User(ctx context.Context, in *BroadcastReq, opts ...grpc.CallOption) (*BroadcastRsp, error) {
+func (c *broadcastClient) Group(ctx context.Context, in *BroadcastGroupReq, opts ...grpc.CallOption) (*BroadcastRsp, error) {
 	out := new(BroadcastRsp)
-	err := c.cc.Invoke(ctx, "/protobuf.BroadcastServer/User", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/protobuf.Broadcast/Group", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *broadcastServerClient) Group(ctx context.Context, in *BroadcastReq, opts ...grpc.CallOption) (*BroadcastRsp, error) {
+func (c *broadcastClient) App(ctx context.Context, in *BroadcastAppReq, opts ...grpc.CallOption) (*BroadcastRsp, error) {
 	out := new(BroadcastRsp)
-	err := c.cc.Invoke(ctx, "/protobuf.BroadcastServer/Group", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/protobuf.Broadcast/App", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *broadcastServerClient) App(ctx context.Context, in *BroadcastReq, opts ...grpc.CallOption) (*BroadcastRsp, error) {
+func (c *broadcastClient) All(ctx context.Context, in *BroadcastReq, opts ...grpc.CallOption) (*BroadcastRsp, error) {
 	out := new(BroadcastRsp)
-	err := c.cc.Invoke(ctx, "/protobuf.BroadcastServer/App", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/protobuf.Broadcast/All", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *broadcastServerClient) All(ctx context.Context, in *BroadcastReq, opts ...grpc.CallOption) (*BroadcastRsp, error) {
-	out := new(BroadcastRsp)
-	err := c.cc.Invoke(ctx, "/protobuf.BroadcastServer/All", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-// BroadcastServerServer is the server API for BroadcastServer service.
-type BroadcastServerServer interface {
+// BroadcastServer is the server API for Broadcast service.
+type BroadcastServer interface {
 	// 向fd发送消息
-	Fd(context.Context, *BroadcastReq) (*BroadcastRsp, error)
+	Fd(context.Context, *BroadcastFdReq) (*BroadcastRsp, error)
 	// 向用户发送消息
-	Uid(context.Context, *BroadcastReq) (*BroadcastRsp, error)
-	// 向用户发送消息
-	User(context.Context, *BroadcastReq) (*BroadcastRsp, error)
+	Uid(context.Context, *BroadcastUidReq) (*BroadcastRsp, error)
 	// 向组发送消息
-	Group(context.Context, *BroadcastReq) (*BroadcastRsp, error)
+	Group(context.Context, *BroadcastGroupReq) (*BroadcastRsp, error)
 	// 向app发送消息
-	App(context.Context, *BroadcastReq) (*BroadcastRsp, error)
+	App(context.Context, *BroadcastAppReq) (*BroadcastRsp, error)
 	// 向所有连接发送消息
 	All(context.Context, *BroadcastReq) (*BroadcastRsp, error)
 }
 
-// UnimplementedBroadcastServerServer can be embedded to have forward compatible implementations.
-type UnimplementedBroadcastServerServer struct {
+// UnimplementedBroadcastServer can be embedded to have forward compatible implementations.
+type UnimplementedBroadcastServer struct {
 }
 
-func (*UnimplementedBroadcastServerServer) Fd(context.Context, *BroadcastReq) (*BroadcastRsp, error) {
+func (*UnimplementedBroadcastServer) Fd(context.Context, *BroadcastFdReq) (*BroadcastRsp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Fd not implemented")
 }
-func (*UnimplementedBroadcastServerServer) Uid(context.Context, *BroadcastReq) (*BroadcastRsp, error) {
+func (*UnimplementedBroadcastServer) Uid(context.Context, *BroadcastUidReq) (*BroadcastRsp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Uid not implemented")
 }
-func (*UnimplementedBroadcastServerServer) User(context.Context, *BroadcastReq) (*BroadcastRsp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method User not implemented")
-}
-func (*UnimplementedBroadcastServerServer) Group(context.Context, *BroadcastReq) (*BroadcastRsp, error) {
+func (*UnimplementedBroadcastServer) Group(context.Context, *BroadcastGroupReq) (*BroadcastRsp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Group not implemented")
 }
-func (*UnimplementedBroadcastServerServer) App(context.Context, *BroadcastReq) (*BroadcastRsp, error) {
+func (*UnimplementedBroadcastServer) App(context.Context, *BroadcastAppReq) (*BroadcastRsp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method App not implemented")
 }
-func (*UnimplementedBroadcastServerServer) All(context.Context, *BroadcastReq) (*BroadcastRsp, error) {
+func (*UnimplementedBroadcastServer) All(context.Context, *BroadcastReq) (*BroadcastRsp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method All not implemented")
 }
 
-func RegisterBroadcastServerServer(s *grpc.Server, srv BroadcastServerServer) {
-	s.RegisterService(&_BroadcastServer_serviceDesc, srv)
+func RegisterBroadcastServer(s *grpc.Server, srv BroadcastServer) {
+	s.RegisterService(&_Broadcast_serviceDesc, srv)
 }
 
-func _BroadcastServer_Fd_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Broadcast_Fd_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BroadcastFdReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BroadcastServer).Fd(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/protobuf.Broadcast/Fd",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BroadcastServer).Fd(ctx, req.(*BroadcastFdReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Broadcast_Uid_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BroadcastUidReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BroadcastServer).Uid(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/protobuf.Broadcast/Uid",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BroadcastServer).Uid(ctx, req.(*BroadcastUidReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Broadcast_Group_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BroadcastGroupReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BroadcastServer).Group(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/protobuf.Broadcast/Group",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BroadcastServer).Group(ctx, req.(*BroadcastGroupReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Broadcast_App_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BroadcastAppReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BroadcastServer).App(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/protobuf.Broadcast/App",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BroadcastServer).App(ctx, req.(*BroadcastAppReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Broadcast_All_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(BroadcastReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(BroadcastServerServer).Fd(ctx, in)
+		return srv.(BroadcastServer).All(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/protobuf.BroadcastServer/Fd",
+		FullMethod: "/protobuf.Broadcast/All",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BroadcastServerServer).Fd(ctx, req.(*BroadcastReq))
+		return srv.(BroadcastServer).All(ctx, req.(*BroadcastReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _BroadcastServer_Uid_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(BroadcastReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(BroadcastServerServer).Uid(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/protobuf.BroadcastServer/Uid",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BroadcastServerServer).Uid(ctx, req.(*BroadcastReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _BroadcastServer_User_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(BroadcastReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(BroadcastServerServer).User(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/protobuf.BroadcastServer/User",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BroadcastServerServer).User(ctx, req.(*BroadcastReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _BroadcastServer_Group_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(BroadcastReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(BroadcastServerServer).Group(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/protobuf.BroadcastServer/Group",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BroadcastServerServer).Group(ctx, req.(*BroadcastReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _BroadcastServer_App_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(BroadcastReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(BroadcastServerServer).App(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/protobuf.BroadcastServer/App",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BroadcastServerServer).App(ctx, req.(*BroadcastReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _BroadcastServer_All_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(BroadcastReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(BroadcastServerServer).All(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/protobuf.BroadcastServer/All",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BroadcastServerServer).All(ctx, req.(*BroadcastReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-var _BroadcastServer_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "protobuf.BroadcastServer",
-	HandlerType: (*BroadcastServerServer)(nil),
+var _Broadcast_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "protobuf.Broadcast",
+	HandlerType: (*BroadcastServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "Fd",
-			Handler:    _BroadcastServer_Fd_Handler,
+			Handler:    _Broadcast_Fd_Handler,
 		},
 		{
 			MethodName: "Uid",
-			Handler:    _BroadcastServer_Uid_Handler,
-		},
-		{
-			MethodName: "User",
-			Handler:    _BroadcastServer_User_Handler,
+			Handler:    _Broadcast_Uid_Handler,
 		},
 		{
 			MethodName: "Group",
-			Handler:    _BroadcastServer_Group_Handler,
+			Handler:    _Broadcast_Group_Handler,
 		},
 		{
 			MethodName: "App",
-			Handler:    _BroadcastServer_App_Handler,
+			Handler:    _Broadcast_App_Handler,
 		},
 		{
 			MethodName: "All",
-			Handler:    _BroadcastServer_All_Handler,
+			Handler:    _Broadcast_All_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

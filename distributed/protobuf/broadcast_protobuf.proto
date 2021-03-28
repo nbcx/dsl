@@ -7,26 +7,22 @@ option java_outer_classname = "ProtobufProto";
 
 package protobuf;
 
-service BroadcastServer {
+service Broadcast {
 
   // 向fd发送消息
-  rpc Fd (BroadcastReq) returns (BroadcastRsp) {
+  rpc Fd (BroadcastFdReq) returns (BroadcastRsp) {
   }
 
   // 向用户发送消息
-  rpc Uid (BroadcastReq) returns (BroadcastRsp) {
-  }
-
-  // 向用户发送消息
-  rpc User (BroadcastReq) returns (BroadcastRsp) {
+  rpc Uid (BroadcastUidReq) returns (BroadcastRsp) {
   }
 
   // 向组发送消息
-  rpc Group (BroadcastReq) returns (BroadcastRsp) {
+  rpc Group (BroadcastGroupReq) returns (BroadcastRsp) {
   }
 
   // 向app发送消息
-  rpc App (BroadcastReq) returns (BroadcastRsp) {
+  rpc App (BroadcastAppReq) returns (BroadcastRsp) {
   }
 
   // 向所有连接发送消息
@@ -39,15 +35,38 @@ service BroadcastServer {
 // 发送消息
 message BroadcastReq {
   string seq = 1; // 序列号
-  string userId = 3; // 用户ID
-  string cms = 4; // cms 动作: msg/enter/exit
-  string type = 5; // type 消息类型，默认是 text
-  string msg = 6; // msg
-  bool isLocal = 7; // 是否查询本机 acc内部调用为:true(本机查询不到即结束)
+  string message = 3; // 消息内容
+}
+
+message BroadcastAppReq {
+  string seq = 1; // 序列号
+  string aid = 2; // 应用ID
+  string message = 3; // msg
+}
+
+message BroadcastFdReq {
+  string seq = 1; // 序列号
+  string aid = 2; // 应用ID
+  string fd = 3; // 链接ID
+  string message = 4; // msg
+}
+
+message BroadcastUidReq {
+  string seq = 1; // 序列号
+  string aid = 2; // 应用ID
+  string uid = 3; // 用户ID
+  string message = 4; // msg
+}
+
+message BroadcastGroupReq {
+  string seq = 1; // 序列号
+  string aid = 2; // 应用ID
+  string gid = 3; // 组ID
+  string message = 4; // msg
 }
 
 message BroadcastRsp {
-  uint32 retCode = 1;
-  string errMsg = 2;
-  string sendMsgId = 3;
+  uint32 code = 1;
+  string message = 2;
+  string seq = 3;
 }

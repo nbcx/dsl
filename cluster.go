@@ -1,27 +1,39 @@
 package gcs
 
 import (
+	"fmt"
 	"github.com/go-redis/redis"
-	"github.com/nbcx/gcs/distributed/component"
-	"github.com/nbcx/gcs/distributed/protobuf"
-	"github.com/nbcx/gcs/distributed/server"
-	"github.com/nbcx/gcs/util"
+	"github.com/nbcx/dsl/distributed/component"
+	"github.com/nbcx/dsl/distributed/protobuf"
+	"github.com/nbcx/dsl/distributed/server"
+	"github.com/nbcx/dsl/util"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"net"
 )
 
 type cluster struct {
-	addr        string
+	ip          string
+	port        int
 	component   component.IComponent
 	supplyServe bool
 }
 
-func NewCluster(addr string) *cluster {
-	return &cluster{
-		addr:        addr,
-		supplyServe: true,
+var instance *cluster
+
+func NewCluster(ip string, port int) *cluster {
+	if instance == nil {
+		instance = &cluster{
+			ip:          ip,
+			port:        port,
+			supplyServe: true,
+		} // <--- NOT THREAD SAFE
 	}
+	return instance
+}
+
+func GetCluster() *cluster {
+	return instance
 }
 
 func newRedisComponent(h H) *component.RedisComponent {
@@ -73,7 +85,7 @@ func (c *cluster) getComponent() (i component.IComponent) {
 
 // 开始集群服务
 func (c *cluster) Start() (err error) {
-	ser := util.AddrToServer(c.addr)
+	ser := util.NewServer(c.ip, c.port)
 
 	if c.supplyServe == true {
 		c.component.Register(ser)
@@ -84,14 +96,15 @@ func (c *cluster) Start() (err error) {
 
 	local[ser.Port] = "wss"
 
-	log.Infof("rpc server startup in %s:%s", ser.Ip, ser.Port)
+	log.Infof("rpc server startup in %s:%d", ser.Ip, ser.Port)
 
-	listen, err := net.Listen("tcp", ":"+ser.Port)
+	listen, err := net.Listen("tcp", fmt.Sprintf("%s:%d", ser.Ip, ser.Port))
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
 	s := grpc.NewServer()
-	protobuf.RegisterAccServerServer(s, &server.Server{})
+	protobuf.RegisterBroadcastServer(s, &server.Broadcast{})
+	protobuf.RegisterGroupServer(s, &server.Group{})
 	if err := s.Serve(listen); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}

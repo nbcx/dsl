@@ -7,18 +7,14 @@ option java_outer_classname = "ProtobufProto";
 
 package protobuf;
 
-service GroupServer {
+service Group {
 
   // 加入组
-  rpc Join (GroupReq) returns (GroupRsp) {
+  rpc Join (GroupFdReq) returns (GroupRsp) {
   }
 
   // 退出组
-  rpc Quit (GroupReq) returns (GroupRsp) {
-  }
-
-  // 添加一个组
-  rpc Add (GroupReq) returns (GroupRsp) {
+  rpc Quit (GroupFdReq) returns (GroupRsp) {
   }
 
   // 删除一个组
@@ -26,10 +22,16 @@ service GroupServer {
   }
 }
 
-// 用户登陆
 message GroupReq {
-  string fd = 1; // ClientID
+  string aid = 1; // 应用ID
   string gid = 2; // 用户ID
+}
+
+message GroupFdReq {
+  string aid = 1; // 应用ID
+  string gid = 2;
+  string fd = 3;
+
 }
 
 message GroupRsp {

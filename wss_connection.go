@@ -3,7 +3,8 @@ package gcs
 import (
 	"fmt"
 	"github.com/gorilla/websocket"
-	"github.com/nbcx/gcs/server"
+	"github.com/nbcx/dsl/server"
+	"github.com/nbcx/dsl/util"
 	log "github.com/sirupsen/logrus"
 	"runtime/debug"
 )
@@ -15,9 +16,9 @@ type WssConnection struct {
 }
 
 // 初始化
-func newWssConnection(appId, addr string, socket *websocket.Conn, ws *wsServer) (client *WssConnection) {
+func newWssConnection(aid, addr string, socket *websocket.Conn, ws *wsServer) (client *WssConnection) {
 	client = &WssConnection{
-		BaseConnection: server.NewBaseConnection(appId, GenClientId(), addr),
+		BaseConnection: server.NewBaseConnection(aid, GenFd(), addr),
 		Socket:         socket,
 		wsServer:       ws,
 	}
@@ -44,10 +45,7 @@ func (c *WssConnection) read() {
 			log.Warn("read clent data error,", c.GetAddr(), err)
 			return
 		}
-
 		log.Info("client data:", string(message))
-
-		//router(c, message)
 		c.wsServer.trigerMessage(c, message)
 	}
 }
@@ -74,7 +72,7 @@ func (c *WssConnection) Write(message string) {
 			fmt.Println("SendMsg stop:", r, string(debug.Stack()))
 		}
 	}()
-	c.WriteByte([]byte(message))
+	c.WriteByte(util.Str2bytes(message))
 }
 
 // 直接向客户端写数据

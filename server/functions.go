@@ -1,7 +1,7 @@
 package server
 
 import (
-	"github.com/nbcx/gcs/util"
+	"github.com/nbcx/dsl/util"
 )
 
 func IsLocal(server *util.Server) (isLocal bool) {

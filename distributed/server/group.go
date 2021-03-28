@@ -2,15 +2,15 @@ package server
 
 import (
 	"context"
-	"github.com/nbcx/gcs/distributed/protobuf"
-	"github.com/nbcx/gcs/server"
+	"github.com/nbcx/dsl/distributed/protobuf"
+	"github.com/nbcx/dsl/server"
 )
 
 type Group struct {
 }
 
-// 处理用户登陆
-func (s *Group) Join(cox context.Context, req *protobuf.GroupReq) (rsp *protobuf.GroupRsp, err error) {
+// 将用户加入指定分组
+func (s *Group) Join(cox context.Context, req *protobuf.GroupFdReq) (rsp *protobuf.GroupRsp, err error) {
 	gid := req.Gid
 	fd := req.Fd
 	c := server.GetManager().Find(fd)
@@ -22,7 +22,8 @@ func (s *Group) Join(cox context.Context, req *protobuf.GroupReq) (rsp *protobuf
 	return
 }
 
-func (s *Group) Quit(ctx context.Context, req *protobuf.GroupReq) (rsp *protobuf.GroupRsp, err error) {
+// 将用户从指定分组移除
+func (s *Group) Quit(ctx context.Context, req *protobuf.GroupFdReq) (rsp *protobuf.GroupRsp, err error) {
 	gid := req.Gid
 	fd := req.Fd
 	c := server.GetManager().Find(fd)
@@ -30,14 +31,17 @@ func (s *Group) Quit(ctx context.Context, req *protobuf.GroupReq) (rsp *protobuf
 		rsp.Code = 500
 		return
 	}
-	c.JoinGroup(gid)
+	c.ExitGroup(gid)
 	return
 }
-func (s *Group) Add(c context.Context, req *protobuf.GroupReq) (rsp *protobuf.GroupRsp, err error) {
 
-	return
-}
-func (s *Group) Del(c context.Context, req *protobuf.GroupReq) (rsp *protobuf.GroupRsp, err error) {
-
+func (s *Group) Del(ctx context.Context, req *protobuf.GroupReq) (rsp *protobuf.GroupRsp, err error) {
+	aid := req.Aid
+	gid := req.Gid
+	c := server.GetManager().DelGroup(aid, gid)
+	if c == false {
+		rsp.Code = 500
+		return
+	}
 	return
 }

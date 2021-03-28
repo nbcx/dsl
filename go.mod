@@ -1,4 +1,4 @@
-module github.com/nbcx/gcs
+module github.com/nbcx/dsl
 
 go 1.14
 
@@ -9,7 +9,6 @@ require (
 	github.com/gorilla/websocket v1.4.2
 	github.com/lestrrat-go/strftime v1.0.3 // indirect
 	github.com/sirupsen/logrus v1.2.0
-	github.com/spf13/viper v1.7.1
 	google.golang.org/grpc v1.27.0
 	google.golang.org/protobuf v1.23.0
 )

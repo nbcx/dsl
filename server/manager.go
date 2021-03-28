@@ -2,7 +2,7 @@ package server
 
 import (
 	"fmt"
-	"github.com/nbcx/gcs/util"
+	"github.com/nbcx/dsl/util"
 	"sync"
 	"time"
 )
@@ -37,15 +37,28 @@ func (manager *ClientManager) getApp(appId string) (result *App) {
 	return
 }
 
-func (manager *ClientManager) joinGroup(client IConnection, groupId string) (result bool) {
+// 将链接加入指定组
+func (manager *ClientManager) joinGroup(client IConnection, gid ...string) (result bool) {
 	app := manager.getApp(client.GetAppId())
-	app.JoinGroup(groupId, client)
+	for _, id := range gid {
+		app.JoinGroup(id, client)
+	}
 	return
 }
 
-func (manager *ClientManager) exitGroup(client IConnection, groupId string) (result bool) {
-	app := manager.getApp(client.GetAppId())
-	app.ExitGroup(groupId, client)
+// 将链接从指定组移除
+func (manager *ClientManager) exitGroup(c IConnection, gid ...string) (result bool) {
+	app := manager.getApp(c.GetAppId())
+	for _, id := range gid {
+		app.ExitGroup(id, c)
+	}
+	return
+}
+
+// 删除组
+func (manager *ClientManager) DelGroup(aid string, gid ...string) (result bool) {
+	app := manager.getApp(aid)
+	app.DelGroup(gid...)
 	return
 }
 
@@ -83,14 +96,24 @@ func (manager *ClientManager) FindWithUid(appId, uid string) (c IConnection) {
 }
 
 // 向服务器上所有连接发送消息
-func (manager *ClientManager) Send(msg []byte) {
+func (manager *ClientManager) SendByte(msg []byte) {
 	for _, c := range manager.Connections {
 		c.WriteByte(msg)
 	}
 }
 
+func (manager *ClientManager) Send(fd, msg string) {
+	manager.Find(fd).Write(msg)
+}
+
+func (manager *ClientManager) SendAll(msg string) {
+	for _, c := range manager.Connections {
+		c.Write(msg)
+	}
+}
+
 // 向指定APP发送消息
-func (manager *ClientManager) SendWithApp(appId string, msg []byte) {
+func (manager *ClientManager) SendByteWithApp(appId string, msg []byte) {
 	app := manager.getApp(appId)
 
 	for _, c := range app.Connections {
@@ -98,21 +121,40 @@ func (manager *ClientManager) SendWithApp(appId string, msg []byte) {
 	}
 }
 
-// 向指定分组发送消息
-func (manager *ClientManager) SendWithGroup(appId string, gids []string, msg []byte) {
+func (manager *ClientManager) SendWithApp(appId string, msg string) {
 	app := manager.getApp(appId)
-	for _, gid := range gids {
-		for _, c := range app.Groups[gid] {
-			fmt.Println(c)
-		}
+	for _, c := range app.Connections {
+		c.Write(msg)
+	}
+}
+
+// 向指定分组发送消息
+func (manager *ClientManager) SendByteWithGroup(appId, gid string, msg []byte) {
+	app := manager.getApp(appId)
+	for _, c := range app.Groups[gid] {
+		fmt.Println(c)
+	}
+}
+
+func (manager *ClientManager) SendWithGroup(appId, gid, msg string) {
+	app := manager.getApp(appId)
+	for _, c := range app.Groups[gid] {
+		fmt.Println(c)
 	}
 }
 
 // 向App上所有登录用户发送消息
-func (manager *ClientManager) SendWithUser(appId string, msg []byte) {
+func (manager *ClientManager) SendByteWithUser(appId string, msg []byte) {
 	app := manager.getApp(appId)
 	for _, c := range app.Users {
 		c.WriteByte(msg)
+	}
+}
+
+func (manager *ClientManager) SendWithUser(appId, msg string) {
+	app := manager.getApp(appId)
+	for _, c := range app.Users {
+		c.Write(msg)
 	}
 }
 

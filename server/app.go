@@ -32,6 +32,16 @@ func (a *App) ExitGroup(groupId string, c IConnection) {
 	}
 }
 
+// 删除组
+// 同时断开所有链接
+func (a *App) DelGroup(gid ...string) {
+	a.GroupLock.Lock()
+	defer a.GroupLock.Unlock()
+	for _, id := range gid {
+		delete(a.Groups, id)
+	}
+}
+
 // 获取组数据
 func (a *App) ListGroup(groupId string) []string {
 	a.GroupLock.Lock()
@@ -53,6 +63,7 @@ func (a *App) Logout(c IConnection) {
 	delete(a.Connections, c.GetUid())
 }
 
+// 通过uid获取链接信息
 func (a *App) getUserConnection(uid string) (c IConnection) {
 	a.UserLock.Lock()
 	defer a.UserLock.Unlock()
@@ -78,18 +89,23 @@ func (a *App) Count() int {
 func (a *App) del(c IConnection) {
 	a.ConnectionLock.RLock()
 	defer a.ConnectionLock.RUnlock()
-
 	delete(a.Connections, c.GetFd())
-
 	// 删除所在的分组
 	if len(c.GetGroup()) > 0 {
 		for _, groupName := range c.GetGroup() {
 			a.ExitGroup(groupName, c)
 		}
 	}
-
 	// 删除系统里的客户端
 	if len(c.GetUid()) > 0 {
 		a.Logout(c)
 	}
+}
+
+// 获取一个链接
+func (a *App) get(fd string) (c IConnection) {
+	a.ConnectionLock.RLock()
+	defer a.ConnectionLock.RUnlock()
+	c = a.Connections[fd]
+	return
 }

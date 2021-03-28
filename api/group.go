@@ -1,33 +1,58 @@
 package api
 
 import (
-	"github.com/nbcx/gcs"
-	"github.com/nbcx/gcs/distributed/client"
+	"fmt"
+	"github.com/nbcx/dsl"
+	"github.com/nbcx/dsl/distributed/client"
 )
 
-func GroupJoin(fd string, gids ...string) {
+func GroupJoin(aid, fd string, gid ...string) {
 	c := gcs.Manager.Find(fd)
 	if c != nil {
-		c.JoinGroup(gids...)
+		fmt.Println("isLocal Write")
+		c.JoinGroup(gid...)
 		return
 	}
-
-	server, isLocal, _ := gcs.GetServerAndIsLocal(fd)
+	server, isLocal, err := gcs.GetServerAndIsLocal(fd)
+	if err != nil {
+		fmt.Println("GroupJoin  GetServerAndIsLocal:", err)
+		return
+	}
 	if isLocal {
 		return
 	}
-	client.GroupJoin(server, fd, gids...)
+	client.GroupJoin(server, fd, gid)
 }
 
-func GroupQuit(fd string, gids ...string) {
+func GroupQuit(aid, fd string, gid ...string) {
 	c := gcs.Manager.Find(fd)
 	if c != nil {
-		c.ExitGroup(gids...)
+		fmt.Println("isLocal Write")
+		c.ExitGroup(gid...)
 		return
 	}
-	server, isLocal, _ := gcs.GetServerAndIsLocal(fd)
+	server, isLocal, err := gcs.GetServerAndIsLocal(fd)
+	if err != nil {
+		fmt.Println("GroupJoin  GetServerAndIsLocal:", err)
+		return
+	}
 	if isLocal {
 		return
 	}
-	client.GroupQuit(server, fd, gids...)
+	client.GroupQuit(server, fd, gid)
+}
+
+func GroupDel(aid string, gid ...string) {
+	servers, err := gcs.GetComponent().GetAllServer()
+	if err != nil {
+		fmt.Println("获取服务集群异常：", err)
+		return
+	}
+	for _, server := range servers {
+		if gcs.IsLocal(server) {
+			gcs.Manager.DelGroup(aid, gid...)
+		} else {
+			client.GroupDel(server, aid, gid)
+		}
+	}
 }

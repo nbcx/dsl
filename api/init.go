@@ -1,7 +1,7 @@
 package api
 
 import (
-	"github.com/nbcx/gcs/distributed/client"
+	"github.com/nbcx/dsl/distributed/client"
 )
 
 var (

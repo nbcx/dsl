@@ -1,7 +1,7 @@
 package component
 
 import (
-	"github.com/nbcx/gcs/util"
+	"github.com/nbcx/dsl/util"
 )
 
 type IComponent interface {

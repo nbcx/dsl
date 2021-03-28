@@ -29,13 +29,12 @@ const (
 // of the legacy proto package is being used.
 const _ = proto.ProtoPackageIsVersion4
 
-// 用户登陆
 type GroupReq struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Fd  string `protobuf:"bytes,1,opt,name=fd,proto3" json:"fd,omitempty"`   // ClientID
+	Aid string `protobuf:"bytes,1,opt,name=aid,proto3" json:"aid,omitempty"` // 应用ID
 	Gid string `protobuf:"bytes,2,opt,name=gid,proto3" json:"gid,omitempty"` // 用户ID
 }
 
@@ -71,9 +70,9 @@ func (*GroupReq) Descriptor() ([]byte, []int) {
 	return file_group_protobuf_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *GroupReq) GetFd() string {
+func (x *GroupReq) GetAid() string {
 	if x != nil {
-		return x.Fd
+		return x.Aid
 	}
 	return ""
 }
@@ -81,6 +80,69 @@ func (x *GroupReq) GetFd() string {
 func (x *GroupReq) GetGid() string {
 	if x != nil {
 		return x.Gid
+	}
+	return ""
+}
+
+type GroupFdReq struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Aid string `protobuf:"bytes,1,opt,name=aid,proto3" json:"aid,omitempty"` // 应用ID
+	Gid string `protobuf:"bytes,2,opt,name=gid,proto3" json:"gid,omitempty"`
+	Fd  string `protobuf:"bytes,3,opt,name=fd,proto3" json:"fd,omitempty"`
+}
+
+func (x *GroupFdReq) Reset() {
+	*x = GroupFdReq{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_group_protobuf_proto_msgTypes[1]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GroupFdReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GroupFdReq) ProtoMessage() {}
+
+func (x *GroupFdReq) ProtoReflect() protoreflect.Message {
+	mi := &file_group_protobuf_proto_msgTypes[1]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GroupFdReq.ProtoReflect.Descriptor instead.
+func (*GroupFdReq) Descriptor() ([]byte, []int) {
+	return file_group_protobuf_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *GroupFdReq) GetAid() string {
+	if x != nil {
+		return x.Aid
+	}
+	return ""
+}
+
+func (x *GroupFdReq) GetGid() string {
+	if x != nil {
+		return x.Gid
+	}
+	return ""
+}
+
+func (x *GroupFdReq) GetFd() string {
+	if x != nil {
+		return x.Fd
 	}
 	return ""
 }
@@ -97,7 +159,7 @@ type GroupRsp struct {
 func (x *GroupRsp) Reset() {
 	*x = GroupRsp{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_group_protobuf_proto_msgTypes[1]
+		mi := &file_group_protobuf_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -110,7 +172,7 @@ func (x *GroupRsp) String() string {
 func (*GroupRsp) ProtoMessage() {}
 
 func (x *GroupRsp) ProtoReflect() protoreflect.Message {
-	mi := &file_group_protobuf_proto_msgTypes[1]
+	mi := &file_group_protobuf_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -123,7 +185,7 @@ func (x *GroupRsp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GroupRsp.ProtoReflect.Descriptor instead.
 func (*GroupRsp) Descriptor() ([]byte, []int) {
-	return file_group_protobuf_proto_rawDescGZIP(), []int{1}
+	return file_group_protobuf_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *GroupRsp) GetCode() uint32 {
@@ -145,30 +207,31 @@ var File_group_protobuf_proto protoreflect.FileDescriptor
 var file_group_protobuf_proto_rawDesc = []byte{
 	0x0a, 0x14, 0x67, 0x72, 0x6f, 0x75, 0x70, 0x5f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66,
 	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x08, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66,
-	0x22, 0x2c, 0x0a, 0x08, 0x47, 0x72, 0x6f, 0x75, 0x70, 0x52, 0x65, 0x71, 0x12, 0x0e, 0x0a, 0x02,
-	0x66, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x66, 0x64, 0x12, 0x10, 0x0a, 0x03,
-	0x67, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x67, 0x69, 0x64, 0x22, 0x38,
-	0x0a, 0x08, 0x47, 0x72, 0x6f, 0x75, 0x70, 0x52, 0x73, 0x70, 0x12, 0x12, 0x0a, 0x04, 0x63, 0x6f,
-	0x64, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x04, 0x63, 0x6f, 0x64, 0x65, 0x12, 0x18,
-	0x0a, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52,
-	0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x32, 0xd3, 0x01, 0x0a, 0x0b, 0x47, 0x72, 0x6f,
-	0x75, 0x70, 0x53, 0x65, 0x72, 0x76, 0x65, 0x72, 0x12, 0x30, 0x0a, 0x04, 0x4a, 0x6f, 0x69, 0x6e,
-	0x12, 0x12, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x47, 0x72, 0x6f, 0x75,
-	0x70, 0x52, 0x65, 0x71, 0x1a, 0x12, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e,
-	0x47, 0x72, 0x6f, 0x75, 0x70, 0x52, 0x73, 0x70, 0x22, 0x00, 0x12, 0x30, 0x0a, 0x04, 0x51, 0x75,
-	0x69, 0x74, 0x12, 0x12, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x47, 0x72,
-	0x6f, 0x75, 0x70, 0x52, 0x65, 0x71, 0x1a, 0x12, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75,
-	0x66, 0x2e, 0x47, 0x72, 0x6f, 0x75, 0x70, 0x52, 0x73, 0x70, 0x22, 0x00, 0x12, 0x2f, 0x0a, 0x03,
-	0x41, 0x64, 0x64, 0x12, 0x12, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x47,
-	0x72, 0x6f, 0x75, 0x70, 0x52, 0x65, 0x71, 0x1a, 0x12, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62,
-	0x75, 0x66, 0x2e, 0x47, 0x72, 0x6f, 0x75, 0x70, 0x52, 0x73, 0x70, 0x22, 0x00, 0x12, 0x2f, 0x0a,
-	0x03, 0x44, 0x65, 0x6c, 0x12, 0x12, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e,
-	0x47, 0x72, 0x6f, 0x75, 0x70, 0x52, 0x65, 0x71, 0x1a, 0x12, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x62, 0x75, 0x66, 0x2e, 0x47, 0x72, 0x6f, 0x75, 0x70, 0x52, 0x73, 0x70, 0x22, 0x00, 0x42, 0x2c,
-	0x0a, 0x19, 0x69, 0x6f, 0x2e, 0x67, 0x72, 0x70, 0x63, 0x2e, 0x65, 0x78, 0x61, 0x6d, 0x70, 0x6c,
-	0x65, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x42, 0x0d, 0x50, 0x72, 0x6f,
-	0x74, 0x6f, 0x62, 0x75, 0x66, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x62, 0x06, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x33,
+	0x22, 0x2e, 0x0a, 0x08, 0x47, 0x72, 0x6f, 0x75, 0x70, 0x52, 0x65, 0x71, 0x12, 0x10, 0x0a, 0x03,
+	0x61, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x61, 0x69, 0x64, 0x12, 0x10,
+	0x0a, 0x03, 0x67, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x67, 0x69, 0x64,
+	0x22, 0x40, 0x0a, 0x0a, 0x47, 0x72, 0x6f, 0x75, 0x70, 0x46, 0x64, 0x52, 0x65, 0x71, 0x12, 0x10,
+	0x0a, 0x03, 0x61, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x61, 0x69, 0x64,
+	0x12, 0x10, 0x0a, 0x03, 0x67, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x67,
+	0x69, 0x64, 0x12, 0x0e, 0x0a, 0x02, 0x66, 0x64, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02,
+	0x66, 0x64, 0x22, 0x38, 0x0a, 0x08, 0x47, 0x72, 0x6f, 0x75, 0x70, 0x52, 0x73, 0x70, 0x12, 0x12,
+	0x0a, 0x04, 0x63, 0x6f, 0x64, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x04, 0x63, 0x6f,
+	0x64, 0x65, 0x12, 0x18, 0x0a, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x18, 0x02, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x32, 0xa0, 0x01, 0x0a,
+	0x05, 0x47, 0x72, 0x6f, 0x75, 0x70, 0x12, 0x32, 0x0a, 0x04, 0x4a, 0x6f, 0x69, 0x6e, 0x12, 0x14,
+	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x47, 0x72, 0x6f, 0x75, 0x70, 0x46,
+	0x64, 0x52, 0x65, 0x71, 0x1a, 0x12, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e,
+	0x47, 0x72, 0x6f, 0x75, 0x70, 0x52, 0x73, 0x70, 0x22, 0x00, 0x12, 0x32, 0x0a, 0x04, 0x51, 0x75,
+	0x69, 0x74, 0x12, 0x14, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x47, 0x72,
+	0x6f, 0x75, 0x70, 0x46, 0x64, 0x52, 0x65, 0x71, 0x1a, 0x12, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x62, 0x75, 0x66, 0x2e, 0x47, 0x72, 0x6f, 0x75, 0x70, 0x52, 0x73, 0x70, 0x22, 0x00, 0x12, 0x2f,
+	0x0a, 0x03, 0x44, 0x65, 0x6c, 0x12, 0x12, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66,
+	0x2e, 0x47, 0x72, 0x6f, 0x75, 0x70, 0x52, 0x65, 0x71, 0x1a, 0x12, 0x2e, 0x70, 0x72, 0x6f, 0x74,
+	0x6f, 0x62, 0x75, 0x66, 0x2e, 0x47, 0x72, 0x6f, 0x75, 0x70, 0x52, 0x73, 0x70, 0x22, 0x00, 0x42,
+	0x2c, 0x0a, 0x19, 0x69, 0x6f, 0x2e, 0x67, 0x72, 0x70, 0x63, 0x2e, 0x65, 0x78, 0x61, 0x6d, 0x70,
+	0x6c, 0x65, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x42, 0x0d, 0x50, 0x72,
+	0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x62, 0x06, 0x70,
+	0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -183,22 +246,21 @@ func file_group_protobuf_proto_rawDescGZIP() []byte {
 	return file_group_protobuf_proto_rawDescData
 }
 
-var file_group_protobuf_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_group_protobuf_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
 var file_group_protobuf_proto_goTypes = []interface{}{
-	(*GroupReq)(nil), // 0: protobuf.GroupReq
-	(*GroupRsp)(nil), // 1: protobuf.GroupRsp
+	(*GroupReq)(nil),   // 0: protobuf.GroupReq
+	(*GroupFdReq)(nil), // 1: protobuf.GroupFdReq
+	(*GroupRsp)(nil),   // 2: protobuf.GroupRsp
 }
 var file_group_protobuf_proto_depIdxs = []int32{
-	0, // 0: protobuf.GroupServer.Join:input_type -> protobuf.GroupReq
-	0, // 1: protobuf.GroupServer.Quit:input_type -> protobuf.GroupReq
-	0, // 2: protobuf.GroupServer.Add:input_type -> protobuf.GroupReq
-	0, // 3: protobuf.GroupServer.Del:input_type -> protobuf.GroupReq
-	1, // 4: protobuf.GroupServer.Join:output_type -> protobuf.GroupRsp
-	1, // 5: protobuf.GroupServer.Quit:output_type -> protobuf.GroupRsp
-	1, // 6: protobuf.GroupServer.Add:output_type -> protobuf.GroupRsp
-	1, // 7: protobuf.GroupServer.Del:output_type -> protobuf.GroupRsp
-	4, // [4:8] is the sub-list for method output_type
-	0, // [0:4] is the sub-list for method input_type
+	1, // 0: protobuf.Group.Join:input_type -> protobuf.GroupFdReq
+	1, // 1: protobuf.Group.Quit:input_type -> protobuf.GroupFdReq
+	0, // 2: protobuf.Group.Del:input_type -> protobuf.GroupReq
+	2, // 3: protobuf.Group.Join:output_type -> protobuf.GroupRsp
+	2, // 4: protobuf.Group.Quit:output_type -> protobuf.GroupRsp
+	2, // 5: protobuf.Group.Del:output_type -> protobuf.GroupRsp
+	3, // [3:6] is the sub-list for method output_type
+	0, // [0:3] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -223,6 +285,18 @@ func file_group_protobuf_proto_init() {
 			}
 		}
 		file_group_protobuf_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GroupFdReq); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_group_protobuf_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*GroupRsp); i {
 			case 0:
 				return &v.state
@@ -241,7 +315,7 @@ func file_group_protobuf_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_group_protobuf_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   3,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
@@ -263,188 +337,150 @@ var _ grpc.ClientConnInterface
 // is compatible with the grpc package it is being compiled against.
 const _ = grpc.SupportPackageIsVersion6
 
-// GroupServerClient is the client API for GroupServer service.
+// GroupClient is the client API for Group service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
-type GroupServerClient interface {
+type GroupClient interface {
 	// 加入组
-	Join(ctx context.Context, in *GroupReq, opts ...grpc.CallOption) (*GroupRsp, error)
+	Join(ctx context.Context, in *GroupFdReq, opts ...grpc.CallOption) (*GroupRsp, error)
 	// 退出组
-	Quit(ctx context.Context, in *GroupReq, opts ...grpc.CallOption) (*GroupRsp, error)
-	// 添加一个组
-	Add(ctx context.Context, in *GroupReq, opts ...grpc.CallOption) (*GroupRsp, error)
+	Quit(ctx context.Context, in *GroupFdReq, opts ...grpc.CallOption) (*GroupRsp, error)
 	// 删除一个组
 	Del(ctx context.Context, in *GroupReq, opts ...grpc.CallOption) (*GroupRsp, error)
 }
 
-type groupServerClient struct {
+type groupClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewGroupServerClient(cc grpc.ClientConnInterface) GroupServerClient {
-	return &groupServerClient{cc}
+func NewGroupClient(cc grpc.ClientConnInterface) GroupClient {
+	return &groupClient{cc}
 }
 
-func (c *groupServerClient) Join(ctx context.Context, in *GroupReq, opts ...grpc.CallOption) (*GroupRsp, error) {
+func (c *groupClient) Join(ctx context.Context, in *GroupFdReq, opts ...grpc.CallOption) (*GroupRsp, error) {
 	out := new(GroupRsp)
-	err := c.cc.Invoke(ctx, "/protobuf.GroupServer/Join", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/protobuf.Group/Join", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *groupServerClient) Quit(ctx context.Context, in *GroupReq, opts ...grpc.CallOption) (*GroupRsp, error) {
+func (c *groupClient) Quit(ctx context.Context, in *GroupFdReq, opts ...grpc.CallOption) (*GroupRsp, error) {
 	out := new(GroupRsp)
-	err := c.cc.Invoke(ctx, "/protobuf.GroupServer/Quit", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/protobuf.Group/Quit", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *groupServerClient) Add(ctx context.Context, in *GroupReq, opts ...grpc.CallOption) (*GroupRsp, error) {
+func (c *groupClient) Del(ctx context.Context, in *GroupReq, opts ...grpc.CallOption) (*GroupRsp, error) {
 	out := new(GroupRsp)
-	err := c.cc.Invoke(ctx, "/protobuf.GroupServer/Add", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/protobuf.Group/Del", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *groupServerClient) Del(ctx context.Context, in *GroupReq, opts ...grpc.CallOption) (*GroupRsp, error) {
-	out := new(GroupRsp)
-	err := c.cc.Invoke(ctx, "/protobuf.GroupServer/Del", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-// GroupServerServer is the server API for GroupServer service.
-type GroupServerServer interface {
+// GroupServer is the server API for Group service.
+type GroupServer interface {
 	// 加入组
-	Join(context.Context, *GroupReq) (*GroupRsp, error)
+	Join(context.Context, *GroupFdReq) (*GroupRsp, error)
 	// 退出组
-	Quit(context.Context, *GroupReq) (*GroupRsp, error)
-	// 添加一个组
-	Add(context.Context, *GroupReq) (*GroupRsp, error)
+	Quit(context.Context, *GroupFdReq) (*GroupRsp, error)
 	// 删除一个组
 	Del(context.Context, *GroupReq) (*GroupRsp, error)
 }
 
-// UnimplementedGroupServerServer can be embedded to have forward compatible implementations.
-type UnimplementedGroupServerServer struct {
+// UnimplementedGroupServer can be embedded to have forward compatible implementations.
+type UnimplementedGroupServer struct {
 }
 
-func (*UnimplementedGroupServerServer) Join(context.Context, *GroupReq) (*GroupRsp, error) {
+func (*UnimplementedGroupServer) Join(context.Context, *GroupFdReq) (*GroupRsp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Join not implemented")
 }
-func (*UnimplementedGroupServerServer) Quit(context.Context, *GroupReq) (*GroupRsp, error) {
+func (*UnimplementedGroupServer) Quit(context.Context, *GroupFdReq) (*GroupRsp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Quit not implemented")
 }
-func (*UnimplementedGroupServerServer) Add(context.Context, *GroupReq) (*GroupRsp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Add not implemented")
-}
-func (*UnimplementedGroupServerServer) Del(context.Context, *GroupReq) (*GroupRsp, error) {
+func (*UnimplementedGroupServer) Del(context.Context, *GroupReq) (*GroupRsp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Del not implemented")
 }
 
-func RegisterGroupServerServer(s *grpc.Server, srv GroupServerServer) {
-	s.RegisterService(&_GroupServer_serviceDesc, srv)
+func RegisterGroupServer(s *grpc.Server, srv GroupServer) {
+	s.RegisterService(&_Group_serviceDesc, srv)
 }
 
-func _GroupServer_Join_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Group_Join_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GroupFdReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GroupServer).Join(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/protobuf.Group/Join",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GroupServer).Join(ctx, req.(*GroupFdReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Group_Quit_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GroupFdReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GroupServer).Quit(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/protobuf.Group/Quit",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GroupServer).Quit(ctx, req.(*GroupFdReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Group_Del_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GroupReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(GroupServerServer).Join(ctx, in)
+		return srv.(GroupServer).Del(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/protobuf.GroupServer/Join",
+		FullMethod: "/protobuf.Group/Del",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GroupServerServer).Join(ctx, req.(*GroupReq))
+		return srv.(GroupServer).Del(ctx, req.(*GroupReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _GroupServer_Quit_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GroupReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(GroupServerServer).Quit(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/protobuf.GroupServer/Quit",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GroupServerServer).Quit(ctx, req.(*GroupReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _GroupServer_Add_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GroupReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(GroupServerServer).Add(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/protobuf.GroupServer/Add",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GroupServerServer).Add(ctx, req.(*GroupReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _GroupServer_Del_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GroupReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(GroupServerServer).Del(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/protobuf.GroupServer/Del",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GroupServerServer).Del(ctx, req.(*GroupReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-var _GroupServer_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "protobuf.GroupServer",
-	HandlerType: (*GroupServerServer)(nil),
+var _Group_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "protobuf.Group",
+	HandlerType: (*GroupServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "Join",
-			Handler:    _GroupServer_Join_Handler,
+			Handler:    _Group_Join_Handler,
 		},
 		{
 			MethodName: "Quit",
-			Handler:    _GroupServer_Quit_Handler,
-		},
-		{
-			MethodName: "Add",
-			Handler:    _GroupServer_Add_Handler,
+			Handler:    _Group_Quit_Handler,
 		},
 		{
 			MethodName: "Del",
-			Handler:    _GroupServer_Del_Handler,
+			Handler:    _Group_Del_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
